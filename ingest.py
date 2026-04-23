@@ -1,0 +1,46 @@
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.vectorstores import Chroma
+from langchain_ollama import OllamaEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from pathlib import Path
+
+DOCUMENTS_DIR = Path("documents")
+VECTOR_STORE_DIR = Path("vector_store")
+
+def load_pdfs():
+    docs = []
+    pdf_files = list(DOCUMENTS_DIR.glob("*.pdf"))
+    if not pdf_files:
+        raise FileNotFoundError("Keine PDFs im 'documents/' Ordner gefunden!")
+    for pdf in pdf_files:
+        print(f"Lade: {pdf.name}")
+        loader = PyPDFLoader(str(pdf))
+        docs.extend(loader.load())
+    print(f"{len(docs)} Seiten geladen.")
+    return docs
+
+def chunk_documents(docs):
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=500,
+        chunk_overlap=100,
+        separators=["\n\n", "\n", " ", ""]
+    )
+    chunks = splitter.split_documents(docs)
+    print(f"{len(chunks)} Chunks erstellt.")
+    return chunks
+
+def build_vector_store(chunks):
+    print("Erstelle Embeddings und speichere in ChromaDB...")
+    embeddings = OllamaEmbeddings(model="nomic-embed-text")
+    db = Chroma.from_documents(
+        documents=chunks,
+        embedding=embeddings,
+        persist_directory=str(VECTOR_STORE_DIR)
+    )
+    print("Vector Store gespeichert!")
+    return db
+
+if __name__ == "__main__":
+    docs = load_pdfs()
+    chunks = chunk_documents(docs)
+    build_vector_store(chunks)
