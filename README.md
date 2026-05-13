@@ -1,86 +1,29 @@
-# RAG Chatbot – Local Document Assistant
+# RAG Chatbot
 
-> Ask questions about your PDF documents using a fully local, free AI pipeline.  
-> No API keys. No cloud. No costs. Everything runs on your machine.
-
----
-
-## What is this?
-
-This project is a **Retrieval-Augmented Generation (RAG)** chatbot built entirely with open-source tools. It lets you upload any PDF document, builds a semantic search index over it, and lets you have a conversation with the content — with source references for every answer.
-
-The chatbot remembers previous questions within a session, so you can ask follow-up questions naturally, just like a real conversation.
-
----
-
-## Demo
-
-```
-You:       What is Retrieval-Augmented Generation?
-Assistant: RAG is a technique that combines a retrieval system with a
-           language model. Instead of relying solely on the model's
-           training data, it first searches a document index for
-           relevant passages, then passes those passages to the LLM
-           as context to generate a grounded answer.
-
-           📚 Sources: Chapter 1, Page 27 – "Building Your First Chatbot"
-```
-
----
-
-## Tech Stack
-
-| Layer | Technology | Why |
-|---|---|---|
-| Language Model | Llama 3.2 3B via Ollama | Fast, free, runs locally |
-| Embeddings | nomic-embed-text via Ollama | High quality, open source |
-| Vector Store | ChromaDB | Persistent, easy to use |
-| Orchestration | LangChain | Industry standard for LLM apps |
-| UI | Streamlit | Clean, Python-native frontend |
-
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                     INGESTION (once)                    │
-│                                                         │
-│   PDF Files  →  Text Chunks  →  Embeddings  →  ChromaDB│
-└─────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────┐
-│                  INFERENCE (per question)               │
-│                                                         │
-│   User Question                                         │
-│        │                                                │
-│        ▼                                                │
-│   Embed Question  →  Similarity Search in ChromaDB      │
-│                              │                          │
-│                              ▼                          │
-│                      Top-K Chunks                       │
-│                              │                          │
-│                              ▼                          │
-│          Prompt = Question + Chunks + Chat History      │
-│                              │                          │
-│                              ▼                          │
-│                    Llama 3.2 (local)                    │
-│                              │                          │
-│                              ▼                          │
-│                   Answer  +  Sources                    │
-└─────────────────────────────────────────────────────────┘
-```
+A fully local, free Retrieval-Augmented Generation (RAG) chatbot. Ask questions about your PDF documents using open-source models — no API keys, no cloud, no cost.
 
 ---
 
 ## Features
 
-- **Fully local** – no data ever leaves your machine
-- **Conversation memory** – ask follow-up questions naturally
-- **Source transparency** – every answer shows which page it came from
-- **Any PDF** – works with books, papers, manuals, contracts
-- **Reset button** – clear conversation history in one click
-- **No API costs** – runs entirely on Ollama + open-source models
+- **Fully local** — nothing leaves your machine
+- **Conversation memory** — ask natural follow-up questions across up to 10 turns
+- **Source transparency** — every answer cites the exact file and page it came from
+- **Safe error handling** — graceful messages if Ollama is unavailable
+- **Reset button** — clears conversation history instantly without reloading the model
+- **Any PDF** — books, papers, manuals, contracts
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Language Model | Llama 3.2 3B via Ollama |
+| Embeddings | nomic-embed-text via Ollama |
+| Vector Store | ChromaDB |
+| Orchestration | LangChain |
+| UI | Streamlit |
 
 ---
 
@@ -88,15 +31,16 @@ Assistant: RAG is a technique that combines a retrieval system with a
 
 ```
 rag-chatbot/
-│
 ├── app.py              # Streamlit UI and session management
 ├── ingest.py           # PDF loading, chunking, embedding, ChromaDB storage
-├── rag_pipeline.py     # Retrieval logic, prompt, LLM, conversation memory
-├── requirements.txt    # Python dependencies
+├── rag_pipeline.py     # Retrieval, prompt, LLM, conversation history
+├── config.py           # Shared path constants
+├── requirements.txt    # Direct Python dependencies
 │
-├── documents/          # ← Place your PDF files here
-└── vector_store/       # Auto-generated ChromaDB index (git-ignored)
+└── documents/          # Place your PDF files here (not committed)
 ```
+
+> `vector_store/` is auto-generated by `ingest.py` and not committed to git.
 
 ---
 
@@ -105,7 +49,7 @@ rag-chatbot/
 ### Prerequisites
 
 - Python 3.10+
-- [Ollama](https://ollama.com/download) installed
+- [Ollama](https://ollama.com/download) installed and running
 
 ### 1. Pull the required models
 
@@ -149,7 +93,11 @@ Place one or more `.pdf` files into the `documents/` folder.
 python ingest.py
 ```
 
-This loads your PDFs, splits them into chunks, generates embeddings with `nomic-embed-text`, and stores everything in a local ChromaDB index.
+To rebuild from scratch (e.g. after adding new PDFs):
+
+```bash
+python ingest.py --reset
+```
 
 ### 7. Start the app
 
@@ -157,28 +105,41 @@ This loads your PDFs, splits them into chunks, generates embeddings with `nomic-
 streamlit run app.py
 ```
 
-Open [http://localhost:8501](http://localhost:8501) in your browser and start chatting.
+Open [http://localhost:8501](http://localhost:8501) in your browser.
 
 ---
 
-## How RAG Works
+## How It Works
 
-Traditional LLMs can only answer from what they learned during training. RAG extends this by giving the model access to your own documents at query time:
+```
+┌─────────────────────────────────────┐
+│          INGESTION  (once)          │
+│  PDF Files → Chunks → Embeddings   │
+│              → ChromaDB            │
+└─────────────────────────────────────┘
 
-1. **Ingestion** – your PDFs are split into overlapping text chunks
-2. **Embedding** – each chunk is converted to a vector (a list of numbers capturing its meaning)
-3. **Retrieval** – when you ask a question, it's also embedded and the most semantically similar chunks are found
-4. **Generation** – the retrieved chunks are given to the LLM as context, so it can answer based on your documents
-
-This means the model doesn't need to be retrained on your data – it just reads the relevant parts on demand.
+┌─────────────────────────────────────┐
+│      INFERENCE  (per question)      │
+│                                     │
+│  User Question                      │
+│       ↓                             │
+│  Embed → Similarity Search          │
+│       ↓                             │
+│  Top-K Chunks + Chat History        │
+│       ↓                             │
+│  Llama 3.2 (local)                  │
+│       ↓                             │
+│  Answer + Sources                   │
+└─────────────────────────────────────┘
+```
 
 ---
 
 ## Limitations
 
-- Only supports PDF files (no `.docx`, `.txt`, etc. yet)
-- Response speed depends on your hardware
-- The 3B model may struggle with very complex reasoning – a larger model like `llama3.1:8b` improves quality if your RAM allows
+- PDF only — no `.docx`, `.txt`, etc.
+- Response speed depends on your hardware (CPU vs GPU)
+- The 3B model may struggle with complex reasoning — use `llama3.1:8b` for higher quality if your RAM allows
 
 ---
 
