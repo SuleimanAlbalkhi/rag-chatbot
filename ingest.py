@@ -1,5 +1,6 @@
 import argparse
 import shutil
+import sys
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaEmbeddings
@@ -14,8 +15,11 @@ def load_pdfs():
         raise FileNotFoundError("Keine PDFs im 'documents/' Ordner gefunden!")
     for pdf in pdf_files:
         print(f"Lade: {pdf.name}")
-        loader = PyPDFLoader(str(pdf))
-        docs.extend(loader.load())
+        try:
+            loader = PyPDFLoader(str(pdf))
+            docs.extend(loader.load())
+        except Exception as e:
+            print(f"Warnung: {pdf.name} konnte nicht geladen werden: {e}")
     print(f"{len(docs)} Seiten geladen.")
     return docs
 
@@ -34,13 +38,12 @@ def chunk_documents(docs):
 def build_vector_store(chunks):
     print("Erstelle Embeddings und speichere in ChromaDB...")
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
-    db = Chroma.from_documents(
+    Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
         persist_directory=str(VECTOR_STORE_DIR)
     )
     print("Vector Store gespeichert!")
-    return db
 
 
 if __name__ == "__main__":
@@ -57,7 +60,7 @@ if __name__ == "__main__":
                 f"Vector Store existiert bereits in '{VECTOR_STORE_DIR}'.\n"
                 "Verwende --reset um ihn zu überschreiben: python ingest.py --reset"
             )
-            exit(0)
+            sys.exit(0)
 
     docs = load_pdfs()
     chunks = chunk_documents(docs)

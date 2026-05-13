@@ -1,3 +1,4 @@
+import logging
 import streamlit as st
 from rag_pipeline import RAGPipeline
 from config import VECTOR_STORE_DIR
@@ -11,7 +12,12 @@ st.set_page_config(
 st.title("🤖 RAG Chatbot")
 st.caption("Stelle Fragen zu deinen PDF-Dokumenten – lokal & kostenlos.")
 
-if not VECTOR_STORE_DIR.exists() or not any(VECTOR_STORE_DIR.iterdir()):
+try:
+    _store_empty = not VECTOR_STORE_DIR.exists() or not any(VECTOR_STORE_DIR.iterdir())
+except OSError:
+    _store_empty = True
+
+if _store_empty:
     st.error("Kein Vector Store gefunden. Führe zuerst `python ingest.py` aus.")
     st.stop()
 
@@ -39,7 +45,10 @@ with st.sidebar:
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+        if message["role"] == "user":
+            st.text(message["content"])
+        else:
+            st.markdown(message["content"])
         if message["role"] == "assistant" and message.get("sources"):
             with st.expander("📚 Quellen anzeigen"):
                 for i, src in enumerate(message["sources"], 1):
@@ -51,14 +60,15 @@ user_input = st.chat_input("Stelle eine Frage zu deinen Dokumenten...")
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
-        st.markdown(user_input)
+        st.text(user_input)
 
     with st.chat_message("assistant"):
         with st.spinner("Denke nach..."):
             try:
                 result = st.session_state.pipeline.ask(user_input)
             except Exception as e:
-                result = {"answer": f"Ein unerwarteter Fehler ist aufgetreten: {e}", "sources": []}
+                logging.exception("Unerwarteter Fehler in pipeline.ask()")
+                result = {"answer": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.", "sources": []}
 
         st.markdown(result["answer"])
 

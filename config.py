@@ -1,4 +1,6 @@
 from pathlib import Path
 
-DOCUMENTS_DIR = Path("documents")
-VECTOR_STORE_DIR = Path("vector_store")
+_ROOT = Path(__file__).parent
+
+DOCUMENTS_DIR = _ROOT / "documents"
+VECTOR_STORE_DIR = _ROOT / "vector_store"
