@@ -1,9 +1,10 @@
+from pathlib import Path
 from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaEmbeddings, ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
-from pathlib import Path
+from config import VECTOR_STORE_DIR
 
-VECTOR_STORE_DIR = Path("vector_store")
+MAX_HISTORY = 10
 
 PROMPT_TEMPLATE = """
 You are a helpful assistant answering questions about uploaded documents.
@@ -20,6 +21,7 @@ Question: {question}
 Answer:
 """
 
+
 class RAGPipeline:
     def __init__(self):
         embeddings = OllamaEmbeddings(model="nomic-embed-text")
@@ -30,7 +32,7 @@ class RAGPipeline:
         self.retriever = self.vector_store.as_retriever(search_kwargs={"k": 6})
         self.llm = ChatOllama(model="llama3.2:3b", temperature=0.1)
         self.prompt = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
-        self.chat_history = []  # Einfache Liste statt Memory-Klasse
+        self.chat_history = []
 
     def _format_history(self) -> str:
         if not self.chat_history:
@@ -45,19 +47,28 @@ class RAGPipeline:
         if not question.strip():
             return {"answer": "Bitte stelle eine Frage.", "sources": []}
 
-        docs = self.retriever.invoke(question)
+        try:
+            docs = self.retriever.invoke(question)
+        except Exception as e:
+            return {"answer": f"Fehler beim Abrufen der Dokumente: {e}", "sources": []}
+
         if not docs:
             return {"answer": "Keine relevanten Informationen gefunden.", "sources": []}
 
         context = "\n\n".join(doc.page_content for doc in docs)
         chain = self.prompt | self.llm
-        response = chain.invoke({
-            "context": context,
-            "chat_history": self._format_history(),
-            "question": question
-        })
+
+        try:
+            response = chain.invoke({
+                "context": context,
+                "chat_history": self._format_history(),
+                "question": question
+            })
+        except Exception as e:
+            return {"answer": f"Fehler beim Generieren der Antwort: {e}", "sources": []}
 
         self.chat_history.append((question, response.content))
+        self.chat_history = self.chat_history[-MAX_HISTORY:]
 
         sources = [
             {

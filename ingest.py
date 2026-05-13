@@ -1,11 +1,11 @@
+import argparse
+import shutil
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import Chroma
 from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from pathlib import Path
+from config import DOCUMENTS_DIR, VECTOR_STORE_DIR
 
-DOCUMENTS_DIR = Path("documents")
-VECTOR_STORE_DIR = Path("vector_store")
 
 def load_pdfs():
     docs = []
@@ -19,6 +19,7 @@ def load_pdfs():
     print(f"{len(docs)} Seiten geladen.")
     return docs
 
+
 def chunk_documents(docs):
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=500,
@@ -28,6 +29,7 @@ def chunk_documents(docs):
     chunks = splitter.split_documents(docs)
     print(f"{len(chunks)} Chunks erstellt.")
     return chunks
+
 
 def build_vector_store(chunks):
     print("Erstelle Embeddings und speichere in ChromaDB...")
@@ -40,7 +42,23 @@ def build_vector_store(chunks):
     print("Vector Store gespeichert!")
     return db
 
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Ingest PDFs into ChromaDB vector store.")
+    parser.add_argument("--reset", action="store_true", help="Delete existing vector store before ingesting.")
+    args = parser.parse_args()
+
+    if VECTOR_STORE_DIR.exists() and any(VECTOR_STORE_DIR.iterdir()):
+        if args.reset:
+            print("Lösche vorhandenen Vector Store...")
+            shutil.rmtree(VECTOR_STORE_DIR)
+        else:
+            print(
+                f"Vector Store existiert bereits in '{VECTOR_STORE_DIR}'.\n"
+                "Verwende --reset um ihn zu überschreiben: python ingest.py --reset"
+            )
+            exit(0)
+
     docs = load_pdfs()
     chunks = chunk_documents(docs)
     build_vector_store(chunks)
