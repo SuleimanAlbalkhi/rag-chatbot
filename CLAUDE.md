@@ -160,7 +160,7 @@ self.llm = ChatOllama(model="llama3.2:3b", temperature=0.7)  # Higher = more cre
 
 ## Important Notes
 
-- **Language Mix**: UI and error messages are in German (Streamlit app designed for German-speaking users). Prompt template is English.
+- **Language**: All UI strings, error messages, log output, and the prompt template are in English. Language detection (`_detect_language` in `rag_pipeline.py`) still handles German user queries and instructs the LLM to respond in kind.
 - **Memory**: Llama 3.2 3B requires ~6GB RAM; 8B version requires ~16GB.
 - **No Tests**: No test suite exists. Manual testing via `streamlit run app.py`.
 - **No Linting**: No pre-commit hooks or linting configuration.

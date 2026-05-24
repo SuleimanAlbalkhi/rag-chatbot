@@ -12,15 +12,15 @@ def load_pdfs():
     docs = []
     pdf_files = list(DOCUMENTS_DIR.glob("*.pdf"))
     if not pdf_files:
-        raise FileNotFoundError("Keine PDFs im 'documents/' Ordner gefunden!")
+        raise FileNotFoundError("No PDFs found in the 'documents/' folder!")
     for pdf in pdf_files:
-        print(f"Lade: {pdf.name}")
+        print(f"Loading: {pdf.name}")
         try:
             loader = PyPDFLoader(str(pdf))
             docs.extend(loader.load())
         except Exception as e:
-            print(f"Warnung: {pdf.name} konnte nicht geladen werden: {e}")
-    print(f"{len(docs)} Seiten geladen.")
+            print(f"Warning: {pdf.name} could not be loaded: {e}")
+    print(f"{len(docs)} pages loaded.")
     return docs
 
 
@@ -31,19 +31,19 @@ def chunk_documents(docs):
         separators=["\n\n", "\n", " ", ""]
     )
     chunks = splitter.split_documents(docs)
-    print(f"{len(chunks)} Chunks erstellt.")
+    print(f"{len(chunks)} chunks created.")
     return chunks
 
 
 def build_vector_store(chunks):
-    print("Erstelle Embeddings und speichere in ChromaDB...")
+    print("Creating embeddings and storing in ChromaDB...")
     embeddings = OllamaEmbeddings(model="nomic-embed-text")
     Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
         persist_directory=str(VECTOR_STORE_DIR)
     )
-    print("Vector Store gespeichert!")
+    print("Vector store saved!")
 
 
 if __name__ == "__main__":
@@ -53,12 +53,12 @@ if __name__ == "__main__":
 
     if VECTOR_STORE_DIR.exists() and any(VECTOR_STORE_DIR.iterdir()):
         if args.reset:
-            print("Lösche vorhandenen Vector Store...")
+            print("Deleting existing vector store...")
             shutil.rmtree(VECTOR_STORE_DIR)
         else:
             print(
-                f"Vector Store existiert bereits in '{VECTOR_STORE_DIR}'.\n"
-                "Verwende --reset um ihn zu überschreiben: python ingest.py --reset"
+                f"Vector store already exists at '{VECTOR_STORE_DIR}'.\n"
+                "Use --reset to overwrite it: python ingest.py --reset"
             )
             sys.exit(0)
 

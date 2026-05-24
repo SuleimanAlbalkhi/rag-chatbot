@@ -11,7 +11,7 @@ PROMPT_TEMPLATE = """
 You are a helpful assistant. Answer the question using the context below.
 
 If the context contains an answer, write a clear and concise response based on it.
-If the context does not contain relevant information, respond: "Dazu habe ich keine Informationen in den Dokumenten gefunden."
+If the context does not contain relevant information, respond: "I found no information about that in the documents."
 
 Context:
 {context}
@@ -61,21 +61,21 @@ class RAGPipeline:
             return "No prior conversation."
         lines = []
         for human, ai in self.chat_history:
-            lines.append(f"Nutzer: {human}")
-            lines.append(f"Assistent: {ai}")
+            lines.append(f"User: {human}")
+            lines.append(f"Assistant: {ai}")
         return "\n".join(lines)
 
     def ask(self, question: str) -> dict:
         if not question.strip():
-            return {"answer": "Bitte stelle eine Frage.", "sources": []}
+            return {"answer": "Please ask a question.", "sources": []}
 
         try:
             docs = self.retriever.invoke(question)
         except Exception as e:
-            return {"answer": f"Fehler beim Abrufen der Dokumente: {e}", "sources": []}
+            return {"answer": f"Error retrieving documents: {e}", "sources": []}
 
         if not docs:
-            return {"answer": "Dazu habe ich keine Informationen in den Dokumenten gefunden.", "sources": []}
+            return {"answer": "I found no information about that in the documents.", "sources": []}
 
         context = "\n\n".join(doc.page_content for doc in docs)
 
@@ -87,7 +87,7 @@ class RAGPipeline:
                 "language": self._detect_language(question),
             })
         except Exception as e:
-            return {"answer": f"Fehler beim Generieren der Antwort: {e}", "sources": []}
+            return {"answer": f"Error generating response: {e}", "sources": []}
 
         answer = str(response.content) if hasattr(response, "content") else str(response)
         self.chat_history.append((question, answer))
@@ -96,7 +96,7 @@ class RAGPipeline:
         seen = set()
         sources = []
         for doc in docs:
-            file = Path(doc.metadata.get("source", "unbekannt")).name
+            file = Path(doc.metadata.get("source", "unknown")).name
             page = doc.metadata.get("page", "?")
             key = (file, page)
             if key not in seen:
