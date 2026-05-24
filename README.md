@@ -9,7 +9,8 @@
 
 ---
 
-<!-- Replace this comment with a screenshot: ![Demo](docs/demo.png) -->
+<img width="1912" height="909" alt="image" src="https://github.com/user-attachments/assets/67be64c5-c323-4486-b785-203d54b9c80d" />
+
 
 ---
 
