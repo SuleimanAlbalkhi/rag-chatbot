@@ -1,29 +1,92 @@
-# RAG Chatbot
+# On-Premise RAG Chatbot
 
-A fully local, free Retrieval-Augmented Generation (RAG) chatbot. Ask questions about your PDF documents using open-source models — no API keys, no cloud, no cost.
+> Ask questions about your PDF documents — fully local, no API keys, no cloud, no data leaving your machine.
+
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)
+![LangChain](https://img.shields.io/badge/LangChain-0.3-1C3C3C?style=flat)
+![Ollama](https://img.shields.io/badge/Ollama-local-black?style=flat)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 
 ---
 
-## Features
+<!-- Replace this comment with a screenshot: ![Demo](docs/demo.png) -->
 
-- **Fully local** — nothing leaves your machine
-- **Conversation memory** — ask natural follow-up questions across up to 10 turns
-- **Source transparency** — every answer cites the exact file and page it came from
-- **Safe error handling** — graceful messages if Ollama is unavailable
-- **Reset button** — clears conversation history instantly without reloading the model
-- **Any PDF** — books, papers, manuals, contracts
+---
+
+## Why this project?
+
+Most RAG chatbots require sending your documents to external APIs. This one doesn't.  
+It was built with a specific use case in mind: **SMEs handling sensitive internal documents** (contracts, manuals, reports) who cannot or will not use cloud-based AI services.
+
+Everything runs on your hardware. Zero vendor lock-in.
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────┐
+│               INGESTION  (once)             │
+│                                             │
+│   PDF Files                                 │
+│       │                                     │
+│       ▼                                     │
+│   PyPDFLoader  →  RecursiveCharacterSplitter│
+│   (chunk_size=500, overlap=100)             │
+│       │                                     │
+│       ▼                                     │
+│   nomic-embed-text  →  ChromaDB             │
+└─────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────┐
+│            INFERENCE  (per question)        │
+│                                             │
+│   User Question                             │
+│       │                                     │
+│       ▼                                     │
+│   nomic-embed-text (embed question)         │
+│       │                                     │
+│       ▼                                     │
+│   ChromaDB similarity search               │
+│   (threshold=0.50, top-k=10)               │
+│       │                                     │
+│       ▼                                     │
+│   Top-K Chunks + Chat History (last 10)    │
+│       │                                     │
+│       ▼                                     │
+│   Llama 3.2:3b  (temperature=0.1)          │
+│       │                                     │
+│       ▼                                     │
+│   Answer + Source Citations                 │
+└─────────────────────────────────────────────┘
+```
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Language Model | Llama 3.2 3B via Ollama |
-| Embeddings | nomic-embed-text via Ollama |
-| Vector Store | ChromaDB |
-| Orchestration | LangChain |
-| UI | Streamlit |
+| Layer          | Technology                  |
+|----------------|-----------------------------|
+| Language Model | Llama 3.2:3b via Ollama     |
+| Embeddings     | nomic-embed-text via Ollama |
+| Vector Store   | ChromaDB                    |
+| Orchestration  | LangChain                   |
+| UI             | Streamlit                   |
+| Language       | Python 3.10+                |
+
+---
+
+## Key Design Decisions
+
+**`temperature=0.1`** — Keeps answers grounded in retrieved context. Lower temperature reduces hallucination risk in document-based Q&A.
+
+**`similarity_score_threshold=0.50`** — Only retrieves chunks that are genuinely similar to the question. Prevents the model from generating answers based on irrelevant document sections.
+
+**`chunk_size=500, chunk_overlap=100`** — Overlap ensures that sentences spanning chunk boundaries are not lost during splitting. Balances context quality against vector store size.
+
+**Language detection** — The pipeline detects German vs. English input from the question text (Unicode characters + vocabulary matching) and instructs the model to respond in the same language. No separate language model required.
+
+**Conversation memory (last 10 turns)** — History is passed as plaintext in the prompt. Bounded window prevents context overflow while maintaining coherent multi-turn dialogue.
 
 ---
 
@@ -35,12 +98,11 @@ rag-chatbot/
 ├── ingest.py           # PDF loading, chunking, embedding, ChromaDB storage
 ├── rag_pipeline.py     # Retrieval, prompt, LLM, conversation history
 ├── config.py           # Shared path constants
-├── requirements.txt    # Direct Python dependencies
-│
+├── requirements.txt    # Python dependencies
 └── documents/          # Place your PDF files here (not committed)
 ```
 
-> `vector_store/` is auto-generated by `ingest.py` and not committed to git.
+> `vector_store/` is auto-generated by `ingest.py` — not committed to git.
 
 ---
 
@@ -49,57 +111,42 @@ rag-chatbot/
 ### Prerequisites
 
 - Python 3.10+
-- [Ollama](https://ollama.com/download) installed and running
+- [Ollama](https://ollama.com/download) installed and running locally
 
-### 1. Pull the required models
+### 1. Pull required models
 
 ```bash
 ollama pull llama3.2:3b
 ollama pull nomic-embed-text
 ```
 
-### 2. Clone the repository
+### 2. Clone and install
 
 ```bash
 git clone https://github.com/SuleimanAlbalkhi/rag-chatbot.git
 cd rag-chatbot
-```
-
-### 3. Create a virtual environment
-
-```bash
 python -m venv .venv
-
-# Windows
-.venv\Scripts\Activate.ps1
-
-# macOS / Linux
-source .venv/bin/activate
-```
-
-### 4. Install dependencies
-
-```bash
+source .venv/bin/activate        # Windows: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-### 5. Add your documents
+### 3. Add your documents
 
 Place one or more `.pdf` files into the `documents/` folder.
 
-### 6. Build the vector store
+### 4. Build the vector store
 
 ```bash
 python ingest.py
 ```
 
-To rebuild from scratch (e.g. after adding new PDFs):
+To rebuild from scratch after adding new PDFs:
 
 ```bash
 python ingest.py --reset
 ```
 
-### 7. Start the app
+### 5. Start the app
 
 ```bash
 streamlit run app.py
@@ -109,37 +156,30 @@ Open [http://localhost:8501](http://localhost:8501) in your browser.
 
 ---
 
-## How It Works
+## Features
 
-```
-┌─────────────────────────────────────┐
-│          INGESTION  (once)          │
-│  PDF Files → Chunks → Embeddings   │
-│              → ChromaDB            │
-└─────────────────────────────────────┘
-
-┌─────────────────────────────────────┐
-│      INFERENCE  (per question)      │
-│                                     │
-│  User Question                      │
-│       ↓                             │
-│  Embed → Similarity Search          │
-│       ↓                             │
-│  Top-K Chunks + Chat History        │
-│       ↓                             │
-│  Llama 3.2 (local)                  │
-│       ↓                             │
-│  Answer + Sources                   │
-└─────────────────────────────────────┘
-```
+- **Fully local** — no data leaves your machine, no API keys required
+- **Conversation memory** — coherent follow-up questions across up to 10 turns
+- **Source transparency** — every answer cites the exact file and page number
+- **Bilingual** — automatically detects German or English questions and responds accordingly
+- **Similarity threshold** — refuses to answer if no relevant context is found, rather than hallucinating
+- **Safe error handling** — graceful messages if Ollama is unavailable or documents are missing
+- **Reset button** — clears conversation history without reloading the model
 
 ---
 
 ## Limitations
 
-- PDF only — no `.docx`, `.txt`, etc.
-- Response speed depends on your hardware (CPU vs GPU)
-- The 3B model may struggle with complex reasoning — use `llama3.1:8b` for higher quality if your RAM allows
+- PDF only — `.docx`, `.txt` not yet supported
+- Response speed depends on hardware (CPU vs. GPU)
+- Llama 3.2:3b may struggle with complex multi-step reasoning — swap to `llama3.1:8b` in `rag_pipeline.py` for higher quality if your RAM allows
+
+---
+
+## Related Project
+
+For a production-ready, multi-tenant version with authentication, PostgreSQL + pgvector, and a Next.js frontend:
+→ [Full-Stack RAG SaaS Platform](https://github.com/SuleimanAlbalkhi/Full-Stack-rag-chatbot)
 
 ---
 
