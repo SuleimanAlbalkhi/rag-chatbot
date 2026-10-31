@@ -348,7 +348,7 @@ e.g. `gdpr.pdf:p37:c2`. The id is passed to Chroma explicitly and returned with 
 - Per-page indexing keeps ids stable when another page's text changes.
 
 **Consequences**
-- Ids are stable only for the same PDF, pdfplumber/pypdf version and chunk settings; changing
+- Ids are stable only for the same PDF, pypdf version and chunk settings; changing
   `CHUNK_SIZE` / `CHUNK_OVERLAP` invalidates gold chunk ids (gold labels at page level stay valid).
 - Splitting per page means chunks never span a page break. A sentence that crosses pages is
   split in two; previously the splitter also worked per page document, so this is no change in behavior.
@@ -382,3 +382,40 @@ loaded and chunked *before* `--reset` deletes the old store.
 - The remaining window where `--reset` can lose the store (embedding failure after deletion,
   Windows file locks) is review M3, deferred (D-020).
 - Scanned PDFs need OCR before ingestion; no OCR is added.
+
+---
+
+## D-014 — Cosine distance space; threshold 0.65 = minimum cosine similarity
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+The Chroma collection is created with `{"hnsw": {"space": "cosine"}}`. LangChain's relevance score
+is then `1 - cosine_distance`, i.e. exactly the cosine similarity between question and chunk, and
+`SCORE_THRESHOLD` means "keep chunks with cosine similarity >= threshold". The default is **0.65**.
+The collection also records the embedding model in its metadata; at startup the pipeline refuses a
+store whose space or embedding model does not match (`IncompatibleVectorStoreError`).
+
+**Alternatives**
+- Keep l2 and document the formula (review M1).
+- Inner product (`ip`); equivalent to cosine for normalized vectors, but scores are not bounded to 0..1 in general.
+- Threshold 0.50 (the old nominal value, now looser), or no threshold and rely on the LLM's `NO_ANSWER`.
+
+**Rationale**
+- Verified: Ollama's nomic-embed-text vectors are unit-normalized (norm 1.0), so the old l2 setup
+  produced `score = 1 - sqrt(2) * (1 - cos)`; the documented 0.50 really meant cos >= 0.646.
+- Cosine scores are what people expect a "similarity threshold" to be; eval sweeps become interpretable.
+- 0.65 reproduces the old cutoff, so this change alters semantics, not behavior. Verified on a test
+  store: the same chunk is retrieved with cos 0.674 (old score 0.539) and the same off-topic question is refused.
+- The startup check prevents mixing an old l2 store (or another embedding model) with the cosine threshold.
+
+**Consequences**
+- **Re-ingestion is required** (`python ingest.py --reset`): existing stores use l2, the old collection
+  name and 0-based pages.
+- Measured on a small synthetic EHDS test PDF (not representative, but a warning sign): relevant German
+  questions scored cos 0.46–0.49 against English chunks, below an off-topic German question (0.53) and
+  an off-topic English one (0.54). With 0.65, German questions will mostly be refused at retrieval;
+  lowering the threshold lets off-topic chunks through. Threshold calibration per language is the second
+  evaluation experiment, after task prefixes (D-003).
+- `RAG_SCORE_THRESHOLD` must now be given as a cosine similarity.

@@ -33,9 +33,10 @@ LLM_TEMPERATURE = _env_float("RAG_LLM_TEMPERATURE", 0.1)
 CHUNK_SIZE = _env_int("RAG_CHUNK_SIZE", 500)
 CHUNK_OVERLAP = _env_int("RAG_CHUNK_OVERLAP", 100)
 
-# Retrieval
+# Retrieval. SCORE_THRESHOLD is a minimum cosine similarity (0..1) between question and chunk.
+# 0.65 reproduces the previous l2-based cutoff (see DECISIONS.md D-014); calibrate it in evaluation.
 TOP_K = _env_int("RAG_TOP_K", 10)
-SCORE_THRESHOLD = _env_float("RAG_SCORE_THRESHOLD", 0.50)
+SCORE_THRESHOLD = _env_float("RAG_SCORE_THRESHOLD", 0.65)
 
 # Conversation
 MAX_HISTORY_TURNS = _env_int("RAG_MAX_HISTORY_TURNS", 10)

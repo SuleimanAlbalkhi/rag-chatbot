@@ -2,11 +2,12 @@ import logging
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
+from langchain_chroma import Chroma
 from langchain_core.language_models import BaseChatModel
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.vectorstores import VectorStore
 import config
-from models import get_embeddings, get_llm, get_vector_store
+from models import DISTANCE_SPACE, get_embeddings, get_llm, get_vector_store
 
 logger = logging.getLogger(__name__)
 
@@ -42,8 +43,28 @@ _GERMAN_WORDS = {
 History = Sequence[tuple[str, str]]
 
 
-class EmptyVectorStoreError(RuntimeError):
+class VectorStoreError(RuntimeError):
+    """The vector store cannot be used; re-ingestion is needed."""
+
+
+class EmptyVectorStoreError(VectorStoreError):
     """The vector store is missing or contains no chunks."""
+
+
+class IncompatibleVectorStoreError(VectorStoreError):
+    """The store was built with a different distance space or embedding model."""
+
+
+def check_store_compatible(store: Chroma) -> None:
+    """Retrieval scores and the threshold are only meaningful for the space and model used at ingest."""
+    space = (store._collection.configuration.get("hnsw") or {}).get("space")
+    embed_model = (store._collection.metadata or {}).get("embed_model")
+    if space != DISTANCE_SPACE or embed_model != config.EMBED_MODEL:
+        raise IncompatibleVectorStoreError(
+            f"Vector store was built with space={space!r}, embed_model={embed_model!r}; "
+            f"expected space={DISTANCE_SPACE!r}, embed_model={config.EMBED_MODEL!r}. "
+            "Run `python ingest.py --reset`."
+        )
 
 
 @dataclass(frozen=True)
@@ -81,6 +102,8 @@ class RAGPipeline:
                 f"Vector store collection '{config.COLLECTION_NAME}' at '{config.VECTOR_STORE_DIR}' "
                 "is empty. Run `python ingest.py --reset`."
             )
+        if isinstance(vector_store, Chroma):
+            check_store_compatible(vector_store)
         self.vector_store = vector_store
         self.llm = llm or get_llm()
         self.prompt = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
@@ -105,7 +128,7 @@ class RAGPipeline:
         return "\n".join(lines)
 
     def retrieve(self, question: str) -> list[RetrievedChunk]:
-        """Top-k chunks whose relevance score reaches the configured threshold."""
+        """Top-k chunks whose cosine similarity to the question reaches SCORE_THRESHOLD."""
         scored = self.vector_store.similarity_search_with_relevance_scores(question, k=config.TOP_K)
         return [
             RetrievedChunk(

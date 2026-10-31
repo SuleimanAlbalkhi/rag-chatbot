@@ -41,9 +41,20 @@ def get_llm() -> ChatOllama:
     )
 
 
+# Cosine space makes Chroma's relevance score equal to cosine similarity (1 - cosine distance),
+# so SCORE_THRESHOLD reads directly as "cosine similarity >= threshold". Chroma's default is l2.
+DISTANCE_SPACE = "cosine"
+
+
+def collection_kwargs() -> dict:
+    """Settings applied when the collection is created; shared by ingest and query."""
+    return {
+        "collection_name": config.COLLECTION_NAME,
+        "persist_directory": str(config.VECTOR_STORE_DIR),
+        "collection_configuration": {"hnsw": {"space": DISTANCE_SPACE}},
+        "collection_metadata": {"embed_model": config.EMBED_MODEL},
+    }
+
+
 def get_vector_store(embeddings: Embeddings) -> Chroma:
-    return Chroma(
-        collection_name=config.COLLECTION_NAME,
-        embedding_function=embeddings,
-        persist_directory=str(config.VECTOR_STORE_DIR),
-    )
+    return Chroma(embedding_function=embeddings, **collection_kwargs())

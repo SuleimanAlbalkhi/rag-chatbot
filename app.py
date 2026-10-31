@@ -1,5 +1,5 @@
 import streamlit as st
-from rag_pipeline import EmptyVectorStoreError, RAGPipeline
+from rag_pipeline import RAGPipeline, VectorStoreError
 from models import ModelUnavailableError
 
 ERROR_MESSAGE = "Sorry, something went wrong while answering. Please try again."
@@ -22,7 +22,7 @@ def load_pipeline() -> RAGPipeline:
 
 try:
     pipeline = load_pipeline()
-except (EmptyVectorStoreError, ModelUnavailableError) as e:
+except (VectorStoreError, ModelUnavailableError) as e:
     st.error(str(e))
     st.stop()
 except Exception as e:

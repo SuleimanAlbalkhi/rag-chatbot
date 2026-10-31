@@ -7,7 +7,7 @@ from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pypdf import PdfReader
 import config
-from models import ModelUnavailableError, get_embeddings
+from models import ModelUnavailableError, collection_kwargs, get_embeddings
 
 
 class IngestError(RuntimeError):
@@ -83,8 +83,7 @@ def build_vector_store(chunks: list[Document]) -> None:
         documents=chunks,
         embedding=get_embeddings(),
         ids=[c.id for c in chunks],
-        collection_name=config.COLLECTION_NAME,
-        persist_directory=str(config.VECTOR_STORE_DIR)
+        **collection_kwargs(),
     )
     print("Vector store saved!")
 
