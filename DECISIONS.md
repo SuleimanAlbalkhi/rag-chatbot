@@ -656,3 +656,48 @@ for unanswerable, the reason and `Searched: term; term; …`).
 - Retrieval metrics should count a hit on any listed evidence page for single items and require all
   listed pages for multi items; unanswerable items are scored on refusal only.
 - No retrieval or model has been run on these questions yet, so the baseline is untouched.
+
+---
+
+## D-022 — Minimal evaluation harness: runs, page-level metrics, retrieval threshold curve, CLI judge
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+- `eval/run_eval.py` stores, per question, the **unfiltered** top-10 chunks (id, file, page, score, rank); in full
+  mode also `answer()` at the configured threshold with **temperature 0** (answer, refused, error, source ids,
+  latency). Each run lives in `eval/runs/<name>/` with `meta.json` (full config, git commit + dirty flag and
+  changed files, test-set sha256). An existing run directory aborts the run; reading `eval/holdout/` needs `--final`.
+- `eval/report.py` writes `RESULTS.md` into the run directory. Metrics, all as "X of N (pct)":
+  Recall@1/3/5/10 and MRR on answerable items at **page level**; a single item hits when any evidence page (or the
+  equivalent article page named in its note, D-021) appears; a multi item only when **all** its pages appear
+  within k. MRR uses the first relevant chunk.
+- Threshold curve 0.40–0.80 is computed from the unfiltered top score (**retrieval-level refusal** only), so one
+  retrieval-only run shows the trade-off without re-running the LLM.
+- `eval/judge.py` uses `claude -p` with the subscription login: fresh empty temp dir, own system prompt,
+  `--tools ""`, `--strict-mcp-config`, `--disable-slash-commands`, `--setting-sources local`,
+  `--no-session-persistence`, `--json-schema {correct, faithful, reason}`; blind (no run/model/config in the
+  prompt). Only answered answerable items are judged; unanswerable items are scored by `refused`. It writes a
+  10-item human labelling form (fixed seed, without the judge's verdicts); `eval/judge_agreement.py` reports raw
+  agreement and Cohen's kappa.
+
+**Alternatives**
+- RAGAS / DeepEval frameworks; chunk-level gold labels; an Ollama model as judge; recomputing the threshold curve
+  with full end-to-end runs per threshold.
+
+**Rationale**
+- A few hundred lines with no new dependencies are easy to audit; the metrics are pure functions with unit tests.
+- Page-level gold survives chunking changes (D-021). Unfiltered retrieval separates ranking quality from the
+  threshold, and one run feeds both recall and the threshold curve.
+- A judge from a different model family than the generator avoids self-preference; the neutral, tool-less, blind
+  setup keeps project context and the run identity out of the verdict. Human labels on a sample tell whether the
+  judge can be trusted at all.
+
+**Consequences**
+- The threshold curve ignores LLM-level `NO_ANSWER` refusals above the threshold; end-to-end refusal rates exist
+  only at the configured threshold.
+- The `claude -p` judge depends on a valid CLI login (it had expired on 2026-10-31) and uses subscription quota;
+  its model alias (`sonnet`) resolves to whatever is current, and the resolved model is recorded per verdict.
+- 10 labelled items give a rough kappa only; it decides whether the judge is usable, not how good it is.
+- Latency depends on the local machine and on Ollama's model being loaded; the first question includes load time.
