@@ -602,3 +602,57 @@ Three review findings are intentionally not fixed in the review-fixes branch:
 **Consequences**
 - Known limitations are documented in the README (Limitations) and CLAUDE.md.
 - Order of follow-up: M7 (first eval experiment), then threshold calibration, M5 (multi-turn eval), M3 (Docker phase).
+
+---
+
+## D-021 — DEV evaluation set: 50 hand-built questions with verified page-level evidence
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+`eval/dev.jsonl` holds 50 English questions over `ehds.pdf` and `gdpr.pdf`, one JSON object per line:
+`id` (D-001…), `question`, `type` (`single` | `multi` | `unanswerable`), `ground_truth`,
+`evidence` (list of `{file, page, quote}`; empty for unanswerable) and `note` (article/recital reference;
+for unanswerable, the reason and `Searched: term; term; …`).
+
+- **Mix:** 25 single, 10 multi (6 across both documents, 4 two places in one document), 15 unanswerable
+  (13 near miss, 2 off-topic; an item is off-topic when its note starts with "Off-topic").
+- **Coverage:** 12 GDPR and 13 EHDS single items; 20 GDPR and 21 EHDS evidence quotes; recitals (12 items),
+  articles and EHDS Annex I; beginning / middle / end of each PDF (EHDS 5/14/7, GDPR 4/15/4 quotes).
+- **Pages** are 1-based physical pages, exactly as the app cites them (D-011). **Quotes** are verbatim
+  (≥ 10 words) and avoid page headers/footers.
+- **Questions** are paraphrased user questions: no 4+ consecutive words shared with any of their quotes.
+- **Single** means one passage suffices. Where a single item lists two quotes, both are on the same page.
+  Two single items (D-003, D-015) cite a recital that states the same rule as an article; the note names
+  the article and its page, so an evaluation can accept either.
+- `eval/verify_testset.py` enforces all of the above against the PDFs, loaded with the app's own loader
+  (`ingest.load_pdf`), and writes `eval/review_dev.md` (git-ignored) for human review. Unanswerable items
+  are checked by whole-word term search over both PDFs; hits are listed, not failed.
+
+**Alternatives**
+- LLM-generated questions (e.g. RAGAS test-set generation) from chunks.
+- Chunk-id-level gold labels instead of page-level evidence.
+- A larger set without manual verification.
+
+**Rationale**
+- Hand-written, paraphrased questions avoid the lexical-overlap bias of generated sets, which flatter
+  retrieval because the question reuses the chunk's wording.
+- Page-level evidence stays valid when chunking changes (chunk ids do not, D-012), so the same set can
+  evaluate the prefix and threshold experiments (D-003, D-014) and later chunking changes.
+- Near-miss unanswerables test the refusal path where it is hardest: the topic is retrieved with high
+  similarity but the specific fact is absent. Several are designed to tempt a wrong answer from a nearby
+  fact (e.g. D-047: GDPR's age 16 for online consent vs. no age for EHDS health-record access).
+- Cross-document multi items exercise the EHDS's references into the GDPR (fines, Art. 9 exceptions,
+  portability, pseudonymisation), which is the realistic hard case for this corpus (D-002).
+- Automatic verification makes the gold data checkable and repeatable instead of trusted.
+
+**Consequences**
+- 50 items give coarse estimates (one item = 2 percentage points); differences of a few points between
+  experiments are noise. A separate held-out set is needed for final numbers, so the dev set can be used
+  freely for tuning.
+- Ground truths were written by the developer from the cited passages; they still need a human review
+  (`eval/review_dev.md`) before the first evaluation run.
+- Retrieval metrics should count a hit on any listed evidence page for single items and require all
+  listed pages for multi items; unanswerable items are scored on refusal only.
+- No retrieval or model has been run on these questions yet, so the baseline is untouched.
