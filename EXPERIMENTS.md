@@ -40,7 +40,15 @@ Design of the set and the harness: DECISIONS.md D-021, D-022.
 **End to end at 0.65 (`baseline`)**: correct refusals 14 of 15 (93%; 4 by threshold, 10 by `NO_ANSWER`),
 false refusals 6 of 35 (17%; 1 by threshold, 5 by `NO_ANSWER`), answered 29 of 35 (83%), errors 0 of 50,
 latency median 3.8 s, p95 8.8 s. The one answered unanswerable item is D-047 ("16 years old", borrowed from
-GDPR Art. 8). Judge not run yet (CLI login expired).
+GDPR Art. 8).
+
+**LLM judge on `baseline`** (29 answered answerable items, `eval/judge.py`, run after a CLI re-login):
+correct 14 of 29 (48%), faithful to the retrieved passages 16 of 29 (55%). By type: single 14 of 21 correct and
+15 of 21 faithful; multi 0 of 8 correct and 1 of 8 faithful. The judge was called with the alias `sonnet`, but the CLI reported the model id
+`claude-opus-5-5` for every verdict; the recorded id is authoritative. Typical failures: missing key facts in
+multi answers (retrieval found only one of the two passages), wrong article numbers (D-029), a date present in a
+passage but not used (D-022). Human labels for `eval/runs/baseline/judge_form.csv` (10 items) are pending, so
+judge reliability (kappa) is not known yet.
 
 **Observations**: retrieval is the bottleneck (7 of 10 multi items miss one page entirely in the top 10);
 the threshold alone hardly separates answerable from unanswerable questions.
