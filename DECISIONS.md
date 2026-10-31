@@ -203,3 +203,94 @@ check before it touches the existing vector store; the app shows the message and
 **Consequences**
 - Startup makes one extra HTTP call to Ollama per model.
 - A model that is pulled but broken still only fails on first use.
+
+---
+
+## D-008 — Stateless core: answer(question, history=None) -> Result
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+`RAGPipeline` holds no conversation state. `answer(question, history=None)` returns a frozen
+`Result(answer, refused, sources, chunks, error)`. `chunks` holds every retrieved chunk with its id
+and relevance score. The caller owns history as a list of `(question, answer)` pairs; the pipeline
+uses the last `MAX_HISTORY_TURNS`. Streamlit rebuilds history from `st.session_state.messages`
+and shares one cached pipeline across sessions (`st.cache_resource`).
+The constructor accepts an optional `vector_store` and `llm` for tests and alternative backends.
+
+**Alternatives**
+- Keep `ask()` with internal history and add a `reset()` (previous design).
+- A session object per user inside the pipeline.
+
+**Rationale**
+- Review H7: shared mutable history leaks between eval questions and between MCP clients.
+- A pure function of its inputs is reproducible for evaluation, thread-safe for an MCP server,
+  and trivially testable.
+- Returning retrieved chunks with scores gives evaluation everything it needs (retrieval
+  metrics, threshold calibration) without a second call.
+
+**Consequences**
+- `ask()` is removed; all callers use `answer()`.
+- Callers must pass history explicitly; forgetting it silently loses multi-turn context.
+- One model instance serves all Streamlit sessions (less memory, but requests share Ollama).
+
+---
+
+## D-009 — Refusals via a sentinel token and a `refused` flag
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+Two refusal paths, both reported as `refused=True` with empty `sources` and a fixed English
+`REFUSAL_MESSAGE`: (1) retrieval-level, when no chunk reaches the threshold (deterministic, no
+LLM call); (2) LLM-level, when the prompt-instructed sentinel `NO_ANSWER` appears in the output.
+
+**Alternatives**
+- Match the free-text refusal sentence (previous behavior, review M6).
+- Structured JSON output from the LLM.
+- A separate LLM call to classify answer vs. refusal.
+
+**Rationale**
+- A fixed token survives the "respond in German" instruction, where a sentence would be
+  translated or paraphrased. Verified live: an English and a German off-topic question both
+  produced `NO_ANSWER` with qwen2.5:3b.
+- JSON output from a 3B model is brittle and adds parsing failures; an extra classifier call doubles latency.
+- Sources on a refusal are misleading (review H3), so they are dropped; `chunks` still shows
+  what was retrieved for debugging and eval.
+
+**Consequences**
+- Any output containing `NO_ANSWER` counts as a refusal, including a partial answer that
+  mentions it. Eval should track how often this happens.
+- The refusal message is English even for German questions.
+- Sources are still all retrieved chunks, not the ones the model actually used; per-chunk
+  citation is a possible later improvement.
+
+---
+
+## D-010 — Error handling: error field for runtime failures, exceptions for setup failures
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+- Setup problems raise at construction: `EmptyVectorStoreError` if the store directory is
+  missing or the collection has no chunks, `ModelUnavailableError` (D-007) for Ollama/models.
+  The directory is checked *before* Chroma is created, because Chroma would silently create an empty store.
+- Per-question failures return `Result(error="retrieval_failed: …" | "generation_failed: …")`
+  with an empty answer and are logged with the traceback. The UI shows a generic message and
+  excludes failed turns from history.
+
+**Alternatives**
+- Raise on every failure and let callers catch.
+- Error text inside `answer` (previous behavior, review H8).
+
+**Rationale**
+- A misconfigured store must never look like a 100% refusal rate (review H6); failing at startup is unmistakable.
+- Per-question failures are expected in a long eval run or a server (Ollama timeout); a
+  structured field lets the caller count, retry or report them without crashing the batch.
+
+**Consequences**
+- Callers must check `result.error` before using `result.answer`.
+- Raw exception text is in `error` for logs and eval; the UI does not show it to end users.

@@ -1,13 +1,25 @@
+import logging
+from collections.abc import Sequence
+from dataclasses import dataclass, field
 from pathlib import Path
+from langchain_core.language_models import BaseChatModel
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.vectorstores import VectorStore
 import config
 from models import get_embeddings, get_llm, get_vector_store
+
+logger = logging.getLogger(__name__)
+
+# The model is told to emit this token instead of a free-text refusal, so refusals
+# can be detected reliably regardless of the answer language.
+NO_ANSWER_TOKEN = "NO_ANSWER"
+REFUSAL_MESSAGE = "I found no information about that in the documents."
 
 PROMPT_TEMPLATE = """
 You are a helpful assistant. Answer the question using the context below.
 
 If the context contains an answer, write a clear and concise response based on it.
-If the context does not contain relevant information, respond: "I found no information about that in the documents."
+If the context does not contain relevant information, respond with exactly: NO_ANSWER
 
 Context:
 {context}
@@ -27,18 +39,58 @@ _GERMAN_WORDS = {
     "beschreibe", "zeige", "gib", "mir", "kannst", "du", "bitte", "welchen",
 }
 
+History = Sequence[tuple[str, str]]
+
+
+class EmptyVectorStoreError(RuntimeError):
+    """The vector store is missing or contains no chunks."""
+
+
+@dataclass(frozen=True)
+class RetrievedChunk:
+    id: str | None
+    file: str
+    page: int | str
+    text: str
+    score: float
+
+
+@dataclass(frozen=True)
+class Source:
+    file: str
+    page: int | str
+    content: str
+
+
+@dataclass(frozen=True)
+class Result:
+    answer: str
+    refused: bool
+    sources: list[Source] = field(default_factory=list)
+    chunks: list[RetrievedChunk] = field(default_factory=list)
+    error: str | None = None
+
 
 class RAGPipeline:
-    def __init__(self):
-        self.vector_store = get_vector_store(get_embeddings())
-        self.retriever = self.vector_store.as_retriever(
-            search_type="similarity_score_threshold",
-            search_kwargs={"score_threshold": config.SCORE_THRESHOLD, "k": config.TOP_K},
-        )
-        self.llm = get_llm()
+    """Stateless RAG core: every call to answer() is independent; callers own the history."""
+
+    def __init__(self, vector_store: VectorStore | None = None, llm: BaseChatModel | None = None):
+        if vector_store is None:
+            # Check before Chroma touches the path: it would silently create an empty store.
+            if not config.VECTOR_STORE_DIR.exists():
+                raise EmptyVectorStoreError(
+                    f"No vector store at '{config.VECTOR_STORE_DIR}'. Run `python ingest.py` first."
+                )
+            vector_store = get_vector_store(get_embeddings())
+        if not vector_store.get(limit=1)["ids"]:
+            raise EmptyVectorStoreError(
+                f"Vector store collection '{config.COLLECTION_NAME}' at '{config.VECTOR_STORE_DIR}' "
+                "is empty. Run `python ingest.py --reset`."
+            )
+        self.vector_store = vector_store
+        self.llm = llm or get_llm()
         self.prompt = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
         self.chain = self.prompt | self.llm
-        self.chat_history = []
 
     def _detect_language(self, text: str) -> str:
         if any(c in _GERMAN_CHARS for c in text):
@@ -48,51 +100,66 @@ class RAGPipeline:
             return "German"
         return "English"
 
-    def _format_history(self) -> str:
-        if not self.chat_history:
+    @staticmethod
+    def _format_history(history: History) -> str:
+        if not history:
             return "No prior conversation."
         lines = []
-        for human, ai in self.chat_history:
+        for human, ai in history:
             lines.append(f"User: {human}")
             lines.append(f"Assistant: {ai}")
         return "\n".join(lines)
 
-    def ask(self, question: str) -> dict:
+    def retrieve(self, question: str) -> list[RetrievedChunk]:
+        """Top-k chunks whose relevance score reaches the configured threshold."""
+        scored = self.vector_store.similarity_search_with_relevance_scores(question, k=config.TOP_K)
+        return [
+            RetrievedChunk(
+                id=doc.id,
+                file=Path(doc.metadata.get("source", "unknown")).name,
+                page=doc.metadata.get("page", "?"),
+                text=doc.page_content,
+                score=score,
+            )
+            for doc, score in scored
+            if score >= config.SCORE_THRESHOLD
+        ]
+
+    def answer(self, question: str, history: History | None = None) -> Result:
         if not question.strip():
-            return {"answer": "Please ask a question.", "sources": []}
+            return Result(answer="Please ask a question.", refused=False, error="empty_question")
 
         try:
-            docs = self.retriever.invoke(question)
+            chunks = self.retrieve(question)
         except Exception as e:
-            return {"answer": f"Error retrieving documents: {e}", "sources": []}
+            logger.exception("Retrieval failed")
+            return Result(answer="", refused=False, error=f"retrieval_failed: {e}")
 
-        if not docs:
-            return {"answer": "I found no information about that in the documents.", "sources": []}
+        if not chunks:
+            return Result(answer=REFUSAL_MESSAGE, refused=True)
 
-        context = "\n\n".join(doc.page_content for doc in docs)
-
+        recent = list(history or [])[-config.MAX_HISTORY_TURNS:]
         try:
             response = self.chain.invoke({
-                "context": context,
-                "chat_history": self._format_history(),
+                "context": "\n\n".join(c.text for c in chunks),
+                "chat_history": self._format_history(recent),
                 "question": question,
                 "language": self._detect_language(question),
             })
         except Exception as e:
-            return {"answer": f"Error generating response: {e}", "sources": []}
+            logger.exception("Generation failed")
+            return Result(answer="", refused=False, chunks=chunks, error=f"generation_failed: {e}")
 
-        answer = str(response.content) if hasattr(response, "content") else str(response)
-        self.chat_history.append((question, answer))
-        self.chat_history = self.chat_history[-config.MAX_HISTORY_TURNS:]
+        text = str(response.content).strip()
+        if NO_ANSWER_TOKEN in text:
+            return Result(answer=REFUSAL_MESSAGE, refused=True, chunks=chunks)
 
         seen = set()
         sources = []
-        for doc in docs:
-            file = Path(doc.metadata.get("source", "unknown")).name
-            page = doc.metadata.get("page", "?")
-            key = (file, page)
+        for chunk in chunks:
+            key = (chunk.file, chunk.page)
             if key not in seen:
                 seen.add(key)
-                sources.append({"file": file, "page": page, "content": doc.page_content[:300]})
+                sources.append(Source(file=chunk.file, page=chunk.page, content=chunk.text[:300]))
 
-        return {"answer": answer, "sources": sources}
+        return Result(answer=text, refused=False, sources=sources, chunks=chunks)

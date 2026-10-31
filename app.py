@@ -1,8 +1,8 @@
-import logging
 import streamlit as st
-from rag_pipeline import RAGPipeline
+from rag_pipeline import EmptyVectorStoreError, RAGPipeline
 from models import ModelUnavailableError
-from config import VECTOR_STORE_DIR
+
+ERROR_MESSAGE = "Sorry, something went wrong while answering. Please try again."
 
 st.set_page_config(
     page_title="RAG Chatbot",
@@ -13,28 +13,45 @@ st.set_page_config(
 st.title("🤖 RAG Chatbot")
 st.caption("Ask questions about your PDF documents – local & free.")
 
+
+@st.cache_resource(show_spinner="Loading model...")
+def load_pipeline() -> RAGPipeline:
+    # The pipeline is stateless, so one instance is shared by all sessions.
+    return RAGPipeline()
+
+
 try:
-    _store_empty = not VECTOR_STORE_DIR.exists() or not any(VECTOR_STORE_DIR.iterdir())
-except OSError:
-    _store_empty = True
-
-if _store_empty:
-    st.error("No vector store found. Run `python ingest.py` first.")
+    pipeline = load_pipeline()
+except (EmptyVectorStoreError, ModelUnavailableError) as e:
+    st.error(str(e))
     st.stop()
-
-if "pipeline" not in st.session_state:
-    with st.spinner("Loading model..."):
-        try:
-            st.session_state.pipeline = RAGPipeline()
-        except ModelUnavailableError as e:
-            st.error(str(e))
-            st.stop()
-        except Exception as e:
-            st.error(f"Error loading pipeline: {e}\nIs Ollama running?")
-            st.stop()
+except Exception as e:
+    st.error(f"Error loading pipeline: {e}\nIs Ollama running?")
+    st.stop()
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
+
+def chat_history() -> list[tuple[str, str]]:
+    """(question, answer) pairs from this session, skipping turns that failed."""
+    msgs = st.session_state.messages
+    return [
+        (q["content"], a["content"])
+        for q, a in zip(msgs[::2], msgs[1::2])
+        if not a.get("error")
+    ]
+
+
+def render_sources(sources):
+    if not sources:
+        return
+    with st.expander("📚 Show sources"):
+        for i, src in enumerate(sources, 1):
+            st.markdown(f"**Source {i}** – `{src.file}`, Page `{src.page}`")
+            st.caption(src.content)
+            st.divider()
+
 
 with st.sidebar:
     st.header("ℹ️ Info")
@@ -44,7 +61,6 @@ with st.sidebar:
     st.divider()
     if st.button("🗑️ Reset conversation"):
         st.session_state.messages = []
-        st.session_state.pipeline.chat_history = []
         st.rerun()
 
 for message in st.session_state.messages:
@@ -52,39 +68,25 @@ for message in st.session_state.messages:
         if message["role"] == "user":
             st.text(message["content"])
         else:
-            st.markdown(message["content"])
-        if message["role"] == "assistant" and message.get("sources"):
-            with st.expander("📚 Show sources"):
-                for i, src in enumerate(message["sources"], 1):
-                    st.markdown(f"**Source {i}** – `{src['file']}`, Page `{src['page']}`")
-                    st.caption(src["content"])
-                    st.divider()
+            st.markdown(ERROR_MESSAGE if message.get("error") else message["content"])
+            render_sources(message.get("sources"))
 
 user_input = st.chat_input("Ask a question about your documents...")
 if user_input:
+    history = chat_history()
     st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
         st.text(user_input)
 
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            try:
-                result = st.session_state.pipeline.ask(user_input)
-            except Exception as e:
-                logging.exception("Unexpected error in pipeline.ask()")
-                result = {"answer": "An unexpected error occurred. Please try again.", "sources": []}
-
-        st.markdown(result["answer"])
-
-        if result["sources"]:
-            with st.expander("📚 Show sources"):
-                for i, src in enumerate(result["sources"], 1):
-                    st.markdown(f"**Source {i}** – `{src['file']}`, Page `{src['page']}`")
-                    st.caption(src["content"])
-                    st.divider()
+            result = pipeline.answer(user_input, history)
+        st.markdown(ERROR_MESSAGE if result.error else result.answer)
+        render_sources(result.sources)
 
     st.session_state.messages.append({
         "role": "assistant",
-        "content": result["answer"],
-        "sources": result["sources"]
+        "content": result.answer,
+        "sources": result.sources,
+        "error": result.error,
     })
