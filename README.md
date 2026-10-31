@@ -67,10 +67,13 @@ exception. The `faithful` verdict was not human-labelled and is **judge-only**.
 
 ### Method
 
-- **Test sets:** hand-written, paraphrased questions (no 4+ word overlap with the source passage) with verbatim
-  page-level evidence, checked against the PDFs by `eval/verify_testset.py`. Three types: single-passage,
-  multi-passage (including questions that need both regulations) and unanswerable — mostly *near misses* where the
-  topic is in the documents but the specific fact is not.
+- **Test sets:** questions, reference answers and evidence were **generated with Claude**; the holdout set was
+  generated in a separate session that never saw the experiments. Both sets were **verified automatically** against
+  the PDFs by `eval/verify_testset.py` (every evidence quote verbatim on its stated page, no 4+ word overlap between
+  question and passage) and **reviewed** for duplicates and label quality; the review found 3 holdout questions
+  that duplicated dev questions, which were replaced. Three types: single-passage, multi-passage (including
+  questions that need both regulations) and unanswerable — mostly *near misses* where the topic is in the
+  documents but the specific fact is not.
 - **Retrieval** is scored at page level on the unfiltered top 10 (Recall@k, MRR; a multi-passage question counts
   only when all its pages are retrieved). **Refusals** are measured end to end at the configured threshold, and as
   a threshold curve from retrieval scores alone.
@@ -102,8 +105,9 @@ exception. The `faithful` verdict was not human-labelled and is **judge-only**.
 
 ## Limitations
 
-- **Small, synthetic test sets:** 50 dev and 25 holdout questions, written by the developer; differences of a few
-  points are noise.
+- **Small, synthetic test sets:** 50 dev and 25 holdout questions, generated with Claude rather than collected from
+  real users; automatic checks and a review make them accurate, not representative. Differences of a few points
+  are noise.
 - **3B generator:** qwen2.5:3b is fast and local but over-cautious and often incomplete on multi-part questions.
 - **Prompt injection is mitigated, not fixed:** documents are delimited and treated as untrusted, links are rendered
   inert, but a strong instruction planted in a PDF still steers the 3B model ([DECISIONS.md D-015](DECISIONS.md)).
