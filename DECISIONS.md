@@ -605,7 +605,7 @@ Three review findings are intentionally not fixed in the review-fixes branch:
 
 ---
 
-## D-021 — DEV evaluation set: 50 hand-built questions with verified page-level evidence
+## D-021 — DEV evaluation set: 50 Claude-generated questions with verified page-level evidence
 
 - **Date:** 2026-10-31
 - **Status:** Accepted
@@ -616,6 +616,10 @@ Three review findings are intentionally not fixed in the review-fixes branch:
 `evidence` (list of `{file, page, quote}`; empty for unanswerable) and `note` (article/recital reference;
 for unanswerable, the reason and `Searched: term; term; …`).
 
+- **Provenance:** questions, ground truths and evidence were **generated with Claude** (not hand-written),
+  then verified automatically (below) and reviewed for duplicates and label quality. The holdout set was
+  generated the same way in a separate session that never saw the experiments; the review found 3 holdout
+  questions duplicating dev questions, which were replaced.
 - **Mix:** 25 single, 10 multi (6 across both documents, 4 two places in one document), 15 unanswerable
   (13 near miss, 2 off-topic; an item is off-topic when its note starts with "Off-topic").
 - **Coverage:** 12 GDPR and 13 EHDS single items; 20 GDPR and 21 EHDS evidence quotes; recitals (12 items),
@@ -631,13 +635,14 @@ for unanswerable, the reason and `Searched: term; term; …`).
   are checked by whole-word term search over both PDFs; hits are listed, not failed.
 
 **Alternatives**
-- LLM-generated questions (e.g. RAGAS test-set generation) from chunks.
+- Unconstrained chunk-based generation (e.g. RAGAS test-set generation) without overlap limits or verification.
+- Questions written by hand or collected from real users.
 - Chunk-id-level gold labels instead of page-level evidence.
 - A larger set without manual verification.
 
 **Rationale**
-- Hand-written, paraphrased questions avoid the lexical-overlap bias of generated sets, which flatter
-  retrieval because the question reuses the chunk's wording.
+- Generated questions are cheap, but chunk-based generators tend to reuse the chunk's wording, which flatters
+  retrieval. Enforcing paraphrase (no 4+ word overlap with the quote) avoids that bias.
 - Page-level evidence stays valid when chunking changes (chunk ids do not, D-012), so the same set can
   evaluate the prefix and threshold experiments (D-003, D-014) and later chunking changes.
 - Near-miss unanswerables test the refusal path where it is hardest: the topic is retrieved with high
@@ -651,8 +656,8 @@ for unanswerable, the reason and `Searched: term; term; …`).
 - 50 items give coarse estimates (one item = 2 percentage points); differences of a few points between
   experiments are noise. A separate held-out set is needed for final numbers, so the dev set can be used
   freely for tuning.
-- Ground truths were written by the developer from the cited passages; they still need a human review
-  (`eval/review_dev.md`) before the first evaluation run.
+- Ground truths were generated with Claude from the cited passages; they are reviewed via
+  `eval/review_dev.md`. The set stays synthetic: accurate against the PDFs, not representative of real users.
 - Retrieval metrics should count a hit on any listed evidence page for single items and require all
   listed pages for multi items; unanswerable items are scored on refusal only.
 - No retrieval or model has been run on these questions yet, so the baseline is untouched.
