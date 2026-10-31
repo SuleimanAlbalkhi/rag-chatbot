@@ -61,12 +61,16 @@ class IncompatibleVectorStoreError(VectorStoreError):
 def check_store_compatible(store: Chroma) -> None:
     """Retrieval scores and the threshold are only meaningful for the space and model used at ingest."""
     space = (store._collection.configuration.get("hnsw") or {}).get("space")
-    embed_model = (store._collection.metadata or {}).get("embed_model")
-    if space != DISTANCE_SPACE or embed_model != config.EMBED_MODEL:
+    metadata = store._collection.metadata or {}
+    embed_model = metadata.get("embed_model")
+    # Stores built before the prefix setting existed were embedded without prefixes.
+    embed_prefixes = bool(metadata.get("embed_prefixes", False))
+    if space != DISTANCE_SPACE or embed_model != config.EMBED_MODEL or embed_prefixes != config.EMBED_PREFIXES:
         raise IncompatibleVectorStoreError(
-            f"Vector store was built with space={space!r}, embed_model={embed_model!r}; "
-            f"expected space={DISTANCE_SPACE!r}, embed_model={config.EMBED_MODEL!r}. "
-            "Run `python ingest.py --reset`."
+            f"Vector store was built with space={space!r}, embed_model={embed_model!r}, "
+            f"embed_prefixes={embed_prefixes}; expected space={DISTANCE_SPACE!r}, "
+            f"embed_model={config.EMBED_MODEL!r}, embed_prefixes={config.EMBED_PREFIXES}. "
+            "Point RAG_VECTOR_STORE_DIR at a matching store or run `python ingest.py --reset`."
         )
 
 

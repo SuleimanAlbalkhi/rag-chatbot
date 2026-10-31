@@ -51,3 +51,30 @@ def test_store_built_with_other_embedding_model_is_rejected(make_store, monkeypa
     monkeypatch.setattr(config, "EMBED_MODEL", "mxbai-embed-large")
     with pytest.raises(IncompatibleVectorStoreError, match="nomic-embed-text"):
         RAGPipeline(vector_store=store, llm=FakeLLM().runnable)
+
+
+def test_store_built_without_prefixes_is_rejected_when_prefixes_are_on(make_store, monkeypatch):
+    store = make_store([("a", "some text", meta(1))])
+    monkeypatch.setattr(config, "EMBED_PREFIXES", True)
+    with pytest.raises(IncompatibleVectorStoreError, match="embed_prefixes=False"):
+        RAGPipeline(vector_store=store, llm=FakeLLM().runnable)
+
+
+def test_store_built_with_prefixes_is_rejected_when_prefixes_are_off(make_store, monkeypatch):
+    monkeypatch.setattr(config, "EMBED_PREFIXES", True)
+    store = make_store([("a", "some text", meta(1))])
+    monkeypatch.setattr(config, "EMBED_PREFIXES", False)
+    with pytest.raises(IncompatibleVectorStoreError, match="embed_prefixes=True"):
+        RAGPipeline(vector_store=store, llm=FakeLLM().runnable)
+
+
+def test_legacy_store_without_prefix_metadata_counts_as_unprefixed(embeddings):
+    legacy = Chroma(
+        collection_name=config.COLLECTION_NAME,
+        persist_directory=str(config.VECTOR_STORE_DIR),
+        embedding_function=embeddings,
+        collection_configuration={"hnsw": {"space": "cosine"}},
+        collection_metadata={"embed_model": config.EMBED_MODEL},
+    )
+    legacy.add_texts(["some text"], metadatas=[meta(1)], ids=["a"])
+    RAGPipeline(vector_store=legacy, llm=FakeLLM().runnable)  # no error

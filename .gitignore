@@ -12,6 +12,7 @@ env/
 
 # RAG runtime artifacts
 vector_store/
+vector_store_*/
 documents/
 
 # Streamlit

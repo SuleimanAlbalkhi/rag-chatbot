@@ -701,3 +701,29 @@ for unanswerable, the reason and `Searched: term; term; …`).
   its model alias (`sonnet`) resolves to whatever is current, and the resolved model is recorded per verdict.
 - 10 labelled items give a rough kappa only; it decides whether the judge is usable, not how good it is.
 - Latency depends on the local machine and on Ollama's model being loaded; the first question includes load time.
+
+---
+
+## D-023 — Keep embeddings without nomic task prefixes (E-001 rejected)
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+`RAG_EMBED_PREFIXES` stays off by default. The option remains in the code (`models.PrefixedEmbeddings`, collection
+metadata `embed_prefixes`, startup mismatch check) so the experiment can be repeated with other settings. The
+baseline threshold (0.65) is unchanged; no new threshold is proposed because the acceptance rule was not met.
+
+**Alternatives**
+- Adopt prefixes anyway because the model card recommends them.
+- Remove the option again.
+
+**Rationale**
+- Pre-registered rule (Recall@5 +2 and MRR not lower) failed: Recall@5 19 → 17 of 35, MRR 0.482 → 0.414 (E-001).
+- Keeping the switch costs little and the metadata check prevents mixing prefixed and unprefixed stores.
+
+**Consequences**
+- Review finding M7 is closed as "tested, not beneficial on the dev set".
+- `vector_store_prefixes/` exists locally (git-ignored) and can be deleted or reused.
+- Retrieval quality remains the main weakness (Recall@10 22 of 35, multi 1 of 10); the next experiments should
+  target recall (chunking, top-k, query rewriting) rather than the embedding prefix.

@@ -47,3 +47,40 @@ def test_unreachable_ollama_raises_clear_error(monkeypatch):
     monkeypatch.setattr(config, "OLLAMA_BASE_URL", "http://127.0.0.1:1")
     with pytest.raises(models.ModelUnavailableError, match="127.0.0.1:1"):
         models.get_llm()
+
+
+class RecordingEmbeddings:
+    def __init__(self):
+        self.seen = []
+
+    def embed_documents(self, texts):
+        self.seen += texts
+        return [[1.0] for _ in texts]
+
+    def embed_query(self, text):
+        self.seen.append(text)
+        return [1.0]
+
+
+def test_prefixed_embeddings_add_nomic_task_prefixes():
+    inner = RecordingEmbeddings()
+    wrapped = models.PrefixedEmbeddings(inner)
+    wrapped.embed_documents(["Article 9 text"])
+    wrapped.embed_query("health data?")
+    assert inner.seen == ["search_document: Article 9 text", "search_query: health data?"]
+
+
+def test_get_embeddings_wraps_only_when_enabled(monkeypatch):
+    monkeypatch.setattr(ollama.Client, "list", lambda self: {"models": [{"model": "nomic-embed-text:latest"}]})
+    assert not isinstance(models.get_embeddings(), models.PrefixedEmbeddings)
+    monkeypatch.setattr(config, "EMBED_PREFIXES", True)
+    assert isinstance(models.get_embeddings(), models.PrefixedEmbeddings)
+
+
+def test_prefix_env_var(monkeypatch):
+    monkeypatch.setenv("RAG_EMBED_PREFIXES", "1")
+    try:
+        assert importlib.reload(config).EMBED_PREFIXES is True
+    finally:
+        monkeypatch.undo()
+        importlib.reload(config)

@@ -1,0 +1,42 @@
+{
+  "run_name": "prefixes",
+  "mode": "retrieval-only",
+  "started": "2026-10-31T15:57:25+00:00",
+  "testset": {
+    "path": "eval/dev.jsonl",
+    "sha256": "b58c4f4f6835f8f8bda209874ef19d31050de1a8f3389c0d58cfc1b5afcb299e",
+    "items": 50
+  },
+  "git": {
+    "commit": "0f0ca45a70581662b8f99a34782d2c7c27f38f21",
+    "dirty": true,
+    "changed_files": [
+      "M .gitignore",
+      " M config.py",
+      " M models.py",
+      " M rag_pipeline.py",
+      " M tests/test_config_models.py",
+      " M tests/test_vector_store.py"
+    ]
+  },
+  "retrieval_k": 10,
+  "config": {
+    "_ROOT": "D:\\Suleiman\\AI_Engineering\\rag-chatbot",
+    "DOCUMENTS_DIR": "D:\\Suleiman\\AI_Engineering\\rag-chatbot\\documents",
+    "VECTOR_STORE_DIR": "vector_store_prefixes",
+    "COLLECTION_NAME": "rag_documents",
+    "OLLAMA_BASE_URL": null,
+    "LLM_MODEL": "qwen2.5:3b",
+    "EMBED_MODEL": "nomic-embed-text",
+    "EMBED_PREFIXES": true,
+    "LLM_TEMPERATURE": 0.0,
+    "NUM_CTX": 8192,
+    "NUM_PREDICT": 1024,
+    "CHUNK_SIZE": 500,
+    "CHUNK_OVERLAP": 100,
+    "TOP_K": 10,
+    "SCORE_THRESHOLD": 0.65,
+    "MAX_HISTORY_TURNS": 10
+  },
+  "finished": "2026-10-31T15:57:29+00:00"
+}

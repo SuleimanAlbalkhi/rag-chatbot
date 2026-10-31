@@ -44,3 +44,42 @@ GDPR Art. 8). Judge not run yet (CLI login expired).
 
 **Observations**: retrieval is the bottleneck (7 of 10 multi items miss one page entirely in the top 10);
 the threshold alone hardly separates answerable from unanswerable questions.
+
+---
+
+## E-001 — nomic task prefixes (`prefixes`) — REJECTED
+
+- **Date:** 2026-10-31
+- **Hypothesis:** nomic-embed-text was trained with `search_document: ` / `search_query: ` prefixes; adding them
+  improves retrieval (review finding M7, D-003).
+- **Change:** `RAG_EMBED_PREFIXES=1` wraps the embeddings (`models.PrefixedEmbeddings`); only the embedded text gets
+  the prefix, stored chunk text is unchanged. Ingested into a separate store `vector_store_prefixes/` (same 1830
+  chunk ids); the baseline store `vector_store/` is untouched. The collection records `embed_prefixes` and the
+  pipeline refuses a store whose setting differs (stores without the key count as unprefixed).
+- **Run:** `RAG_EMBED_PREFIXES=1 RAG_VECTOR_STORE_DIR=vector_store_prefixes python eval/run_eval.py
+  --testset eval/dev.jsonl --run-name prefixes --retrieval-only`. Everything else as E-000.
+- **Provenance:** commit `0f0ca45a` with a dirty tree: the prefix feature itself (`config.py`, `models.py`,
+  `rag_pipeline.py`, tests, `.gitignore`) was uncommitted; the changed files are listed in `meta.json`.
+- **Acceptance rule (set before the run):** Recall@5 (all answerable) improves by ≥ 2 questions **and** MRR does
+  not drop.
+
+| Metric (answerable) | baseline | prefixes | Δ |
+|---|---|---|---|
+| Recall@1 | 10 of 35 (29%) | 8 of 35 (23%) | −2 |
+| Recall@3 | 15 of 35 (43%) | 14 of 35 (40%) | −1 |
+| **Recall@5** | **19 of 35 (54%)** | **17 of 35 (49%)** | **−2** |
+| Recall@10 | 22 of 35 (63%) | 21 of 35 (60%) | −1 |
+| **MRR** | **0.482** | **0.414** | **−0.068** |
+| Single Recall@5 / MRR | 18 of 25 / 0.534 | 17 of 25 / 0.471 | −1 / −0.063 |
+| Multi Recall@10 / MRR | 1 of 10 / 0.354 | 1 of 10 / 0.272 | 0 / −0.082 |
+
+Retrieval-level threshold curve with prefixes (for reference): correct refusals / false refusals at 0.60: 3 of 15 /
+0 of 35; 0.65: 4 of 15 / 1 of 35; 0.70: 8 of 15 / 4 of 35; 0.75: 13 of 15 / 21 of 35.
+
+- **Result:** both conditions fail (Recall@5 −2, MRR −0.068). **Rejected**; the threshold proposal (planned for an
+  accepted result) was not made.
+- **Per item:** the first relevant rank improved for 8 items and got worse for 11 (e.g. D-010 rank 1 → 9, D-018
+  rank 2 → not in top 10; D-023 rank 8 → 3, D-034 multi not found → rank 5). Mean top score barely moved
+  (answerable 0.748 → 0.747, unanswerable 0.690 → 0.689), so prefixes neither sharpen nor shift the score scale.
+- **Caveat:** with 35 answerable items, a 2-question difference is within noise; the evidence is "no improvement",
+  not "prefixes are harmful". The result may differ with other chunk sizes or after query rewriting.
