@@ -1,15 +1,12 @@
 import streamlit as st
-from rag_pipeline import RAGPipeline, VectorStoreError
+
 from models import ModelUnavailableError
+from rag_pipeline import RAGPipeline, VectorStoreError
 from safe_markdown import neutralize_links
 
 ERROR_MESSAGE = "Sorry, something went wrong while answering. Please try again."
 
-st.set_page_config(
-    page_title="RAG Chatbot",
-    page_icon="🤖",
-    layout="wide"
-)
+st.set_page_config(page_title="RAG Chatbot", page_icon="🤖", layout="wide")
 
 st.title("🤖 RAG Chatbot")
 st.caption("Ask questions about your PDF documents – local & free.")
@@ -39,7 +36,8 @@ def chat_history() -> list[tuple[str, str]]:
     msgs = st.session_state.messages
     return [
         (q["content"], a["content"])
-        for q, a in zip(msgs[::2], msgs[1::2])
+        # strict=False: a turn that crashed mid-way leaves an unpaired user message, which is skipped.
+        for q, a in zip(msgs[::2], msgs[1::2], strict=False)
         if not a.get("error")
     ]
 
@@ -92,9 +90,11 @@ if user_input:
         st.markdown(ERROR_MESSAGE if result.error else neutralize_links(result.answer))
         render_sources(result.sources)
 
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": result.answer,
-        "sources": result.sources,
-        "error": result.error,
-    })
+    st.session_state.messages.append(
+        {
+            "role": "assistant",
+            "content": result.answer,
+            "sources": result.sources,
+            "error": result.error,
+        }
+    )

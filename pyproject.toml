@@ -1,0 +1,18 @@
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+# Docs contain illustrative snippets; keep them as written.
+extend-exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
+filterwarnings = [
+    # Third-party deprecation noise on Python 3.14 (langsmith uses asyncio.iscoroutinefunction).
+    "ignore::DeprecationWarning:langsmith.*",
+    "ignore::DeprecationWarning:chromadb.*",
+]

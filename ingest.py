@@ -2,10 +2,12 @@ import argparse
 import shutil
 import sys
 from pathlib import Path
+
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pypdf import PdfReader
+
 import config
 from models import ModelUnavailableError, collection_kwargs, get_embeddings
 
@@ -61,9 +63,7 @@ def load_pdfs(skip_failed: bool = False) -> list[Document]:
 def chunk_documents(docs: list[Document]) -> list[Document]:
     """Split pages into chunks and give each a deterministic id: '<file>:p<page>:c<index on page>'."""
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=config.CHUNK_SIZE,
-        chunk_overlap=config.CHUNK_OVERLAP,
-        separators=["\n\n", "\n", " ", ""]
+        chunk_size=config.CHUNK_SIZE, chunk_overlap=config.CHUNK_OVERLAP, separators=["\n\n", "\n", " ", ""]
     )
     chunks = []
     for page in docs:
@@ -91,8 +91,9 @@ def build_vector_store(chunks: list[Document]) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Ingest PDFs into ChromaDB vector store.")
     parser.add_argument("--reset", action="store_true", help="Delete existing vector store before ingesting.")
-    parser.add_argument("--skip-failed", action="store_true",
-                        help="Ingest the readable PDFs even if some PDFs fail to load.")
+    parser.add_argument(
+        "--skip-failed", action="store_true", help="Ingest the readable PDFs even if some PDFs fail to load."
+    )
     args = parser.parse_args()
 
     # Fail before touching the existing store if Ollama or the embedding model is unavailable.

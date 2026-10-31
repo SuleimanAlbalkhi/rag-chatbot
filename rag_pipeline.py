@@ -3,11 +3,13 @@ import re
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
+
 from langchain_chroma import Chroma
 from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.vectorstores import VectorStore
+
 import config
 from models import DISTANCE_SPACE, get_embeddings, get_llm, get_vector_store
 
@@ -107,11 +109,13 @@ class RAGPipeline:
             check_store_compatible(vector_store)
         self.vector_store = vector_store
         self.llm = llm or get_llm()
-        self.prompt = ChatPromptTemplate.from_messages([
-            ("system", SYSTEM_PROMPT),
-            MessagesPlaceholder("history"),
-            ("human", USER_TEMPLATE),
-        ])
+        self.prompt = ChatPromptTemplate.from_messages(
+            [
+                ("system", SYSTEM_PROMPT),
+                MessagesPlaceholder("history"),
+                ("human", USER_TEMPLATE),
+            ]
+        )
         self.chain = self.prompt | self.llm
 
     def retrieve(self, question: str) -> list[RetrievedChunk]:
@@ -143,13 +147,15 @@ class RAGPipeline:
         if not chunks:
             return Result(answer=REFUSAL_MESSAGE, refused=True)
 
-        passages, recent = fit_to_budget(question, chunks, list(history or [])[-config.MAX_HISTORY_TURNS:])
+        passages, recent = fit_to_budget(question, chunks, list(history or [])[-config.MAX_HISTORY_TURNS :])
         try:
-            response = self.chain.invoke({
-                "passages": format_passages(passages),
-                "history": history_messages(recent),
-                "question": question,
-            })
+            response = self.chain.invoke(
+                {
+                    "passages": format_passages(passages),
+                    "history": history_messages(recent),
+                    "question": question,
+                }
+            )
         except Exception as e:
             logger.exception("Generation failed")
             return Result(answer="", refused=False, chunks=chunks, error=f"generation_failed: {e}")

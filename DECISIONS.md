@@ -539,3 +539,39 @@ in a code span, autolinks and bare URLs become code spans, reference definitions
 - This protects the Streamlit UI only. The MCP server will return raw text; its clients must apply
   their own rendering policy (to be documented with the MCP work).
 - Legitimate links are no longer clickable.
+
+---
+
+## D-019 — Offline test suite, ruff, GitHub Actions CI
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+- `pytest` suite in `tests/` (42 tests) that needs no Ollama: deterministic fake embeddings
+  (bag-of-words for ranking, "angle" vectors with exact cosine values for threshold tests), a recording
+  fake LLM, real Chroma stores in temp directories, and PDFs generated in-test (`tests/pdf_factory.py`).
+- `ruff` for lint (`E, F, W, I, B, UP`) and formatting, line length 120, Markdown excluded.
+- GitHub Actions runs lint, format check and tests on Python 3.12 and 3.13, with `OLLAMA_HOST`
+  pointing at a closed port so an accidental real model call fails fast.
+- Dev tools pinned in `requirements-dev.txt`.
+
+**Alternatives**
+- Integration tests against a real Ollama in CI (an Ollama service container with model pulls).
+- Mocking Chroma instead of using real temp stores.
+- black + flake8 + isort instead of ruff.
+
+**Rationale**
+- Fast and deterministic: the suite runs in ~7 s; model downloads in CI would be slow and flaky.
+- Real Chroma catches what mocks would hide: distance space, collection metadata, relevance score math.
+- The fakes cover the review findings directly: page numbering and labels, chunk ids, ingest failure
+  modes, threshold semantics, store compatibility, refusal/error paths, statelessness, prompt structure,
+  passage-tag stripping, context budget, link neutralization, config overrides, model checks.
+- One tool (ruff) replaces three.
+
+**Consequences**
+- Answer quality, language following and injection resistance are **not** covered by tests; they need
+  the real model and belong in the evaluation phase.
+- Verified locally on Python 3.14 and 3.13 (fresh venv), also with `OLLAMA_HOST` on a dead port.
+  Python 3.12 runs only in CI and is unverified until the first push.
+- `ruff format` was applied once to the whole codebase (formatting-only changes in this commit).
