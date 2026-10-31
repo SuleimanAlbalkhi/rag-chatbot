@@ -43,13 +43,20 @@ def chat_history() -> list[tuple[str, str]]:
     ]
 
 
+def page_ref(src) -> str:
+    ref = f"Page {src.page}"
+    if src.page_label and src.page_label != str(src.page):
+        ref += f" (printed: {src.page_label})"
+    return ref
+
+
 def render_sources(sources):
     if not sources:
         return
     with st.expander("📚 Show sources"):
         for i, src in enumerate(sources, 1):
-            st.markdown(f"**Source {i}** – `{src.file}`, Page `{src.page}`")
-            st.caption(src.content)
+            st.markdown(f"**Source {i}** – `{src.file}`, {page_ref(src)} · relevance {src.score:.2f}")
+            st.caption(src.text)
             st.divider()
 
 

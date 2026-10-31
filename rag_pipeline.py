@@ -50,24 +50,18 @@ class EmptyVectorStoreError(RuntimeError):
 class RetrievedChunk:
     id: str | None
     file: str
-    page: int | str
+    page: int | None  # 1-based physical page number
+    page_label: str | None  # label printed in the PDF, may differ from `page`
     text: str
     score: float
-
-
-@dataclass(frozen=True)
-class Source:
-    file: str
-    page: int | str
-    content: str
 
 
 @dataclass(frozen=True)
 class Result:
     answer: str
     refused: bool
-    sources: list[Source] = field(default_factory=list)
-    chunks: list[RetrievedChunk] = field(default_factory=list)
+    sources: list[RetrievedChunk] = field(default_factory=list)  # chunks cited for the answer; empty on refusal
+    chunks: list[RetrievedChunk] = field(default_factory=list)  # everything retrieved, with scores
     error: str | None = None
 
 
@@ -117,7 +111,8 @@ class RAGPipeline:
             RetrievedChunk(
                 id=doc.id,
                 file=Path(doc.metadata.get("source", "unknown")).name,
-                page=doc.metadata.get("page", "?"),
+                page=doc.metadata.get("page"),
+                page_label=doc.metadata.get("page_label"),
                 text=doc.page_content,
                 score=score,
             )
@@ -154,12 +149,4 @@ class RAGPipeline:
         if NO_ANSWER_TOKEN in text:
             return Result(answer=REFUSAL_MESSAGE, refused=True, chunks=chunks)
 
-        seen = set()
-        sources = []
-        for chunk in chunks:
-            key = (chunk.file, chunk.page)
-            if key not in seen:
-                seen.add(key)
-                sources.append(Source(file=chunk.file, page=chunk.page, content=chunk.text[:300]))
-
-        return Result(answer=text, refused=False, sources=sources, chunks=chunks)
+        return Result(answer=text, refused=False, sources=chunks, chunks=chunks)

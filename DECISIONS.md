@@ -294,3 +294,91 @@ LLM call); (2) LLM-level, when the prompt-instructed sentinel `NO_ANSWER` appear
 **Consequences**
 - Callers must check `result.error` before using `result.answer`.
 - Raw exception text is in `error` for logs and eval; the UI does not show it to end users.
+
+---
+
+## D-011 — Citations: 1-based physical page plus printed page label, one source per chunk
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+Ingestion stores `page` as the 1-based physical page number and `page_label` as the label from
+the PDF's page-label table (pypdf `reader.page_labels`). The UI shows `Page N` and appends
+`(printed: X)` only when the label differs. Sources are no longer deduplicated by page: every
+retrieved chunk is its own source with id, full text and relevance score.
+
+**Alternatives**
+- Show only `page_label` (what is printed on the paper page).
+- Show only `page + 1`.
+- Keep page-level dedup with a 300-character snippet (previous behavior, review L1).
+
+**Rationale**
+- Review H2: the 0-based index was shown as a page number, so every citation was one page early.
+- The physical page number is what users type into a PDF viewer to jump there, and works for
+  every PDF; labels are optional and can be non-numeric (e.g. roman numerals in front matter).
+- Chunk-level sources show the exact passage that went to the model; with page dedup the
+  supporting passage could be hidden behind another chunk from the same page.
+
+**Consequences**
+- Requires re-ingestion: old stores have 0-based `page` and no `page_label`.
+- The sources list can contain several entries for the same page.
+- Article/paragraph-level citations (more useful for legal text) remain future work.
+
+---
+
+## D-012 — Deterministic chunk IDs: `<file>:p<page>:c<index>`
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+Each page is split separately and each chunk gets the id `<file name>:p<physical page>:c<index on page>`,
+e.g. `gdpr.pdf:p37:c2`. The id is passed to Chroma explicitly and returned with every retrieved chunk.
+
+**Alternatives**
+- Random UUIDs (previous behavior, review M2).
+- Content hash (stable across re-chunking of unrelated pages, but opaque).
+- Global running index per file.
+
+**Rationale**
+- Retrieval eval needs gold chunk ids that survive re-ingestion; verified: two ingests of the
+  same PDF produce identical ids.
+- Human-readable ids make gold-label creation and debugging easy (the id says where the chunk is).
+- Per-page indexing keeps ids stable when another page's text changes.
+
+**Consequences**
+- Ids are stable only for the same PDF, pdfplumber/pypdf version and chunk settings; changing
+  `CHUNK_SIZE` / `CHUNK_OVERLAP` invalidates gold chunk ids (gold labels at page level stay valid).
+- Splitting per page means chunks never span a page break. A sentence that crosses pages is
+  split in two; previously the splitter also worked per page document, so this is no change in behavior.
+- Two PDFs with the same file name in different folders would collide; only one folder is ingested.
+
+---
+
+## D-013 — Strict ingestion: any unreadable PDF aborts unless --skip-failed
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+`ingest.py` reports every PDF that cannot be read or has no extractable text and exits with
+status 1 before touching the vector store. `--skip-failed` ingests the readable PDFs anyway
+(still failing if none are readable). Pages without text are listed as warnings. PDFs are now
+loaded and chunked *before* `--reset` deletes the old store.
+
+**Alternatives**
+- Warn and continue (previous behavior, review M4).
+- Abort only when zero chunks are produced.
+
+**Rationale**
+- A silently missing regulation would make evaluation look like a retrieval failure. An explicit
+  abort is cheap to work around and impossible to overlook.
+- Loading before deleting means a bad PDF no longer costs the existing store. Verified with a
+  corrupt and a text-less PDF: exit 1, existing store intact.
+
+**Consequences**
+- Ingestion is now all-or-nothing by default; CI or Docker builds fail on a bad PDF (intended).
+- The remaining window where `--reset` can lose the store (embedding failure after deletion,
+  Windows file locks) is review M3, deferred (D-020).
+- Scanned PDFs need OCR before ingestion; no OCR is added.
