@@ -1,11 +1,7 @@
 from pathlib import Path
-from langchain_community.vectorstores import Chroma
-from langchain_ollama import OllamaEmbeddings, ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
-from config import VECTOR_STORE_DIR
-
-MAX_HISTORY = 10
-SIMILARITY_THRESHOLD = 0.50
+import config
+from models import get_embeddings, get_llm, get_vector_store
 
 PROMPT_TEMPLATE = """
 You are a helpful assistant. Answer the question using the context below.
@@ -34,16 +30,12 @@ _GERMAN_WORDS = {
 
 class RAGPipeline:
     def __init__(self):
-        embeddings = OllamaEmbeddings(model="nomic-embed-text")
-        self.vector_store = Chroma(
-            persist_directory=str(VECTOR_STORE_DIR),
-            embedding_function=embeddings
-        )
+        self.vector_store = get_vector_store(get_embeddings())
         self.retriever = self.vector_store.as_retriever(
             search_type="similarity_score_threshold",
-            search_kwargs={"score_threshold": SIMILARITY_THRESHOLD, "k": 10},
+            search_kwargs={"score_threshold": config.SCORE_THRESHOLD, "k": config.TOP_K},
         )
-        self.llm = ChatOllama(model="llama3.2:3b", temperature=0.1)
+        self.llm = get_llm()
         self.prompt = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
         self.chain = self.prompt | self.llm
         self.chat_history = []
@@ -91,7 +83,7 @@ class RAGPipeline:
 
         answer = str(response.content) if hasattr(response, "content") else str(response)
         self.chat_history.append((question, answer))
-        self.chat_history = self.chat_history[-MAX_HISTORY:]
+        self.chat_history = self.chat_history[-config.MAX_HISTORY_TURNS:]
 
         seen = set()
         sources = []

@@ -1,6 +1,7 @@
 import logging
 import streamlit as st
 from rag_pipeline import RAGPipeline
+from models import ModelUnavailableError
 from config import VECTOR_STORE_DIR
 
 st.set_page_config(
@@ -25,6 +26,9 @@ if "pipeline" not in st.session_state:
     with st.spinner("Loading model..."):
         try:
             st.session_state.pipeline = RAGPipeline()
+        except ModelUnavailableError as e:
+            st.error(str(e))
+            st.stop()
         except Exception as e:
             st.error(f"Error loading pipeline: {e}\nIs Ollama running?")
             st.stop()
