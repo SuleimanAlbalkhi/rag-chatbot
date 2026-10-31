@@ -1,5 +1,6 @@
 import streamlit as st
 
+import config
 from models import ModelUnavailableError
 from rag_pipeline import RAGPipeline, VectorStoreError
 from safe_markdown import neutralize_links
@@ -61,9 +62,10 @@ def render_sources(sources):
 
 with st.sidebar:
     st.header("ℹ️ Info")
-    st.markdown("**Model:** Llama 3.2 (local)")
-    st.markdown("**Embeddings:** nomic-embed-text")
-    st.markdown("**Vector Store:** ChromaDB")
+    st.markdown(f"**Model:** `{config.LLM_MODEL}` (local, via Ollama)")
+    st.markdown(f"**Embeddings:** `{config.EMBED_MODEL}`")
+    st.markdown(f"**Vector store:** ChromaDB, collection `{config.COLLECTION_NAME}`")
+    st.markdown(f"**Retrieval:** top {config.TOP_K}, cosine ≥ {config.SCORE_THRESHOLD:.2f}")
     st.divider()
     if st.button("🗑️ Reset conversation"):
         st.session_state.messages = []

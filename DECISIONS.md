@@ -501,8 +501,8 @@ dropped first. If Ollama reports `prompt_eval_count >= num_ctx`, a warning is lo
 
 **Rationale**
 - Review H1: Ollama's default 4096 window silently cut the start of the prompt (instructions and context).
-- 8192 holds 10 passages plus several turns; qwen2.5:3b supports 32k, and the extra KV cache is small
-  (~0.3 GB) on the local GPU.
+- 8192 holds 10 passages plus several turns; qwen2.5:3b supports 32k, and the extra memory is moderate:
+  measured with `ollama ps`, 3.1 GB at 8192 vs. 2.5 GB at 4096, still 100% on the local GPU.
 - A character heuristic is dependency-free and errs on the safe side; exact counting is not worth a
   tokenizer dependency at this size.
 - Verified live: 10 history turns of ~3,600 characters each now drop the 5 oldest turns and the answer stays correct.
@@ -575,3 +575,30 @@ in a code span, autolinks and bare URLs become code spans, reference definitions
 - Verified locally on Python 3.14 and 3.13 (fresh venv), also with `OLLAMA_HOST` on a dead port.
   Python 3.12 runs only in CI and is unverified until the first push.
 - `ruff format` was applied once to the whole codebase (formatting-only changes in this commit).
+
+---
+
+## D-020 — Deferred review findings: M3, M5, M7
+
+- **Date:** 2026-10-31
+- **Status:** Deferred
+
+**Decision**
+Three review findings are intentionally not fixed in the review-fixes branch:
+
+| Finding | What remains | Why deferred |
+|---|---|---|
+| **M3** — `--reset` deletes the store before rebuilding | If embedding fails after deletion (Ollama crash), the store is gone; on Windows, deleting a store the app holds open fails half-way. | Partly mitigated: models are checked and PDFs are loaded/chunked before deletion (D-007, D-013). A full fix (build in a temp dir, atomic swap) fits better with the Docker work, where the store location and volume layout will be decided. |
+| **M5** — follow-up questions are retrieved without history | "And what about paragraph 2?" retrieves on those words alone and is usually refused. | Query rewriting adds an LLM call per question and changes retrieval behavior. It should be introduced as a measured evaluation experiment (with multi-turn test cases), not before the baseline exists. |
+| **M7** — nomic-embed-text used without `search_query:` / `search_document:` prefixes | Retrieval may be weaker than the model allows; cross-lingual scores are low (D-014). | The user chose prefixes as the first evaluation experiment; the baseline must not include them (D-003). |
+
+**Alternatives**
+- Fix all three now.
+
+**Rationale**
+- Each one either changes the evaluation baseline (M5, M7) or depends on infrastructure decisions not made
+  yet (M3). Fixing them now would make the coming evaluation unable to attribute effects.
+
+**Consequences**
+- Known limitations are documented in the README (Limitations) and CLAUDE.md.
+- Order of follow-up: M7 (first eval experiment), then threshold calibration, M5 (multi-turn eval), M3 (Docker phase).
