@@ -28,8 +28,27 @@ def _validated(cls, **kwargs):
         raise ModelUnavailableError(f"{e} (base URL: {kwargs.get('base_url') or 'OLLAMA_HOST or default'})") from e
 
 
-def get_embeddings() -> OllamaEmbeddings:
-    return _validated(OllamaEmbeddings, model=config.EMBED_MODEL, base_url=config.OLLAMA_BASE_URL)
+# Task prefixes nomic-embed-text was trained with; only the embedded text gets them, stored chunks stay unchanged.
+DOCUMENT_PREFIX = "search_document: "
+QUERY_PREFIX = "search_query: "
+
+
+class PrefixedEmbeddings(Embeddings):
+    """Adds nomic task prefixes before embedding documents and queries."""
+
+    def __init__(self, inner: Embeddings):
+        self.inner = inner
+
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        return self.inner.embed_documents([DOCUMENT_PREFIX + t for t in texts])
+
+    def embed_query(self, text: str) -> list[float]:
+        return self.inner.embed_query(QUERY_PREFIX + text)
+
+
+def get_embeddings() -> Embeddings:
+    embeddings = _validated(OllamaEmbeddings, model=config.EMBED_MODEL, base_url=config.OLLAMA_BASE_URL)
+    return PrefixedEmbeddings(embeddings) if config.EMBED_PREFIXES else embeddings
 
 
 def get_llm() -> ChatOllama:
@@ -54,7 +73,7 @@ def collection_kwargs() -> dict:
         "collection_name": config.COLLECTION_NAME,
         "persist_directory": str(config.VECTOR_STORE_DIR),
         "collection_configuration": {"hnsw": {"space": DISTANCE_SPACE}},
-        "collection_metadata": {"embed_model": config.EMBED_MODEL},
+        "collection_metadata": {"embed_model": config.EMBED_MODEL, "embed_prefixes": config.EMBED_PREFIXES},
     }
 
 

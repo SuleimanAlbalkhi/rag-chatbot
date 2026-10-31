@@ -1,0 +1,16 @@
+{
+  "n": 10,
+  "correct": {
+    "n": 10,
+    "agreement": 9,
+    "kappa": 0.8,
+    "disagreements": [
+      {
+        "id": "D-003",
+        "human": false,
+        "judge": true
+      }
+    ]
+  },
+  "faithful": "not validated"
+}

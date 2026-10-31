@@ -136,6 +136,17 @@ All of these are environment variables (see `config.py` and the README table); n
 - **Source documents:** English EU regulations (EHDS 2025/327, GDPR 2016/679) in `documents/` (git-ignored).
 - **Evaluation baseline:** nomic-embed-text without task prefixes and threshold 0.65 are deliberate baseline
   choices; prefixes and threshold calibration are planned experiments. Do not change them casually.
+- **Evaluation rules (strict):**
+  - Test sets (`eval/dev.jsonl`, `eval/holdout/`) are **never changed**. Runs store the test set's sha256 and
+    `eval/report.py` refuses to score a run whose test set changed.
+  - `eval/holdout/` is **only read in an explicitly ordered final run** (`run_eval.py --final`). Never open,
+    print, search or tune against it otherwise.
+  - Runs **never overwrite each other**: every run gets a new `--run-name`; `eval/runs/<name>/` is never
+    modified except by adding derived files (`RESULTS.md`, judge outputs).
+- **Evaluation commands:**
+  `python eval/run_eval.py --testset eval/dev.jsonl --run-name <name> [--retrieval-only]`,
+  `python eval/report.py --run <name>`, `python eval/judge.py --run <name>` (Claude Code CLI login),
+  `python eval/judge_agreement.py --run <name>`.
 - **Prompt injection:** mitigated, not solved. qwen2.5:3b still follows strong instructions planted in a
   passage (see D-015). Only ingest trusted PDFs.
 - **Tests:** `pytest` runs offline with fake embeddings and a fake LLM (`tests/conftest.py`). Answer quality

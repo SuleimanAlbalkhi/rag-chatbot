@@ -1,0 +1,537 @@
+﻿id,question,reference_answer,candidate_answer,retrieved_passages,human_correct (1/0),human_faithful (1/0)
+D-002,"How quickly does a company have to respond when I exercise one of my data protection rights, and can it take longer?","Without undue delay and at the latest within one month of receiving the request. This can be extended by two further months for complex or numerous requests; the person must be told about the extension, with reasons, within the first month.","The controller should be obliged to respond to requests from the data subject without undue delay and at the latest within one month. The period may be extended by two further months where necessary, taking into account the complexity and number of the requests. The controller shall inform the data subject of any such extension within one month of receipt of the request, together with the reasons for the delay.","[1] accordance with Article 55, unless the personal data breach is unlikely to result in a risk to the rights and freedoms of 
+natural persons. Where the notification to the supervisory authority is not made within 72 hours, it shall be 
+accompanied by reasons for the delay. 
+2. The processor shall notify the controller without undue delay after becoming aware of a personal data breach. 
+3. The notification referred to in paragraph 1 shall at least:
+
+[2] such as law-enforcement authorities. For example, the need to mitigate an immediate risk of damage would call 
+for prompt communication with data subjects whereas the need to implement appropriate measures against 
+continuing or similar personal data breaches may justify more time for communication. 
+(87)  It should be ascertained whether all appropriate technological protection and organisational measures have been
+
+[3] notification cannot be achieved within 72 hours, the reasons for the delay should accompany the notification 
+and information may be provided in phases without undue further delay. 
+(86)  The controller should communicate to the data subject a personal data breach, without undue delay, where that 
+personal data breach is likely to result in a high risk to the rights and freedoms of the natural person in order to
+
+[4] regarding the exercise of those tasks. He or she shall not be dismissed or penalised by the controller or the processor for 
+performing his tasks. The data protection officer shall directly report to the highest management level of the controller 
+or the processor. 
+4. Data subjects may contact the data protection officer with regard to all issues related to processing of their 
+personal data and to the exercise of their rights under this Regulation.
+
+[5] requests to be made electronically, especially where personal data are processed by electronic means. The 
+controller should be obliged to respond to requests from the data subject without undue delay and at the latest 
+within one month and to give reasons where the controller does not intend to comply with any such requests. 
+4.5.2016 L 119/11 Official Journal of the European Union EN
+
+[6] without undue delay and in any event within one month of receipt of the request. That period may be extended by two 
+further months where necessary, taking into account the complexity and number of the requests. The controller shall 
+inform the data subject of any such extension within one month of receipt of the request, together with the reasons for 
+the delay. Where the data subject makes the request by electronic form means, the information shall be provided by
+
+[7] against an individual controller, which has up to one month to reply to a request. The right to access personal 
+electronic health data under this Regulation should be limited to the categories of data falling within its scope, be 
+exercised via an electronic health data access service and entail an immediate answer. The rights under Regulation 
+(EU) 2016/679 should continue to apply, allowing natural persons to benefit from their rights under both legal
+
+[8] (137)  There may be an urgent need to act in order to protect the rights and freedoms of data subjects, in particular 
+when the danger exists that the enforcement of a right of a data subject could be considerably impeded. A 
+supervisory authority should therefore be able to adopt duly justified provisional measures on its territory with a 
+specified period of validity which should not exceed three months.
+
+[9] the protection of personal data to lodge a complaint on his or her behalf with a supervisory authority, exercise 
+the right to a judicial remedy on behalf of data subjects or, if provided for in Member State law, exercise the right 
+to receive compensation on behalf of data subjects. A Member State may provide for such a body, organisation or 
+association to have the right to lodge a complaint in that Member State, independently of a data subject's
+
+[10] personal data and to the exercise of their rights under this Regulation. 
+5. The data protection officer shall be bound by secrecy or confidentiality concerning the performance of his or her 
+tasks, in accordance with Union or Member State law. 
+6. The data protection officer may fulfil other tasks and duties. The controller or processor shall ensure that any such 
+tasks and duties do not result in a conflict of interests. 
+Article 39 
+Tasks of the data protection officer",1,
+D-003,"If an organisation suffers a data leak, how long does it have to tell the data protection regulator?","Without undue delay and, where feasible, within 72 hours of becoming aware of the breach, unless the breach is unlikely to result in a risk to people's rights and freedoms. Later notifications must explain the delay.","The controller should notify the personal data breach to the supervisory authority without undue delay and, where feasible, not later than 72 hours after having become aware of it.","[1] aware that a personal data breach has occurred, the controller should notify the personal data breach to the 
+supervisory authority without undue delay and, where feasible, not later than 72 hours after having become 
+aware of it, unless the controller is able to demonstrate, in accordance with the accountability principle, that the 
+personal data breach is unlikely to result in a risk to the rights and freedoms of natural persons. Where such
+
+[2] accordance with Article 55, unless the personal data breach is unlikely to result in a risk to the rights and freedoms of 
+natural persons. Where the notification to the supervisory authority is not made within 72 hours, it shall be 
+accompanied by reasons for the delay. 
+2. The processor shall notify the controller without undue delay after becoming aware of a personal data breach. 
+3. The notification referred to in paragraph 1 shall at least:
+
+[3] notification cannot be achieved within 72 hours, the reasons for the delay should accompany the notification 
+and information may be provided in phases without undue further delay. 
+(86)  The controller should communicate to the data subject a personal data breach, without undue delay, where that 
+personal data breach is likely to result in a high risk to the rights and freedoms of the natural person in order to
+
+[4] controller, unless he or she is required to do so by Union or Member State law. 
+Article 33 
+Notification of a personal data breach to the supervisory authority 
+1. In the case of a personal data breach, the controller shall without undue delay and, where feasible, not later than 
+72 hours after having become aware of it, notify the personal data breach to the supervisory authority competent in
+
+[5] implemented to establish immediately whether a personal data breach has taken place and to inform promptly 
+the supervisory authority and the data subject. The fact that the notification was made without undue delay 
+should be established taking into account in particular the nature and gravity of the personal data breach and its 
+consequences and adverse effects for the data subject. Such notification may result in an intervention of the
+
+[6] the specific case. The supervisory authority should inform the data subject of the progress and the outcome of 
+the complaint within a reasonable period. If the case requires further investigation or coordination with another 
+supervisory authority, intermediate information should be given to the data subject. In order to facilitate the 
+submission of complaints, each supervisory authority should take measures such as providing a complaint
+
+[7] Article 34 
+Communication of a personal data breach to the data subject 
+1. When the personal data breach is likely to result in a high risk to the rights and freedoms of natural persons, the 
+controller shall communicate the personal data breach to the data subject without undue delay. 
+4.5.2016 L 119/52 Official Journal of the European Union EN
+
+[8] 3. The notification referred to in paragraph 1 shall at least: 
+(a)  describe the nature of the personal data breach including where possible, the categories and approximate number of 
+data subjects concerned and the categories and approximate number of personal data records concerned; 
+(b)  communicate the name and contact details of the data protection officer or other contact point where more 
+information can be obtained; 
+(c)  describe the likely consequences of the personal data breach;
+
+[9] information can be obtained; 
+(c)  describe the likely consequences of the personal data breach; 
+(d)  describe the measures taken or proposed to be taken by the controller to address the personal data breach, 
+including, where appropriate, measures to mitigate its possible adverse effects. 
+4. Where, and in so far as, it is not possible to provide the information at the same time, the information may be 
+provided in phases without undue further delay.
+
+[10] (e)  upon request, provide information to any data subject concerning the exercise of their rights under this Regulation 
+and, if appropriate, cooperate with the supervisory authorities in other Member States to that end; 
+(f)  handle complaints lodged by a data subject, or by a body, organisation or association in accordance with Article 80, 
+and investigate, to the extent appropriate, the subject matter of the complaint and inform the complainant of the",0,
+D-008,When is an organisation obliged to appoint a data protection officer?,"When processing is done by a public authority or body (except courts in their judicial capacity), when core activities require regular and systematic monitoring of people on a large scale, or when core activities involve large-scale processing of special categories of data or criminal-offence data.","The designation of a data protection officer is required in cases where:
+
+1. The processing is carried out by a public authority or body, except for courts acting in their judicial capacity.
+2. The core activities of the controller or the processor consist of processing operations which, by virtue of their nature, scope and purposes, require regular and systematic monitoring of data subjects on a large scale; or
+3. The core activities of the controller or the processor consist of processing on a large scale of special categories of personal data pursuant to Article 9 and personal data relating to criminal convictions and offences referred to in Article 10.
+
+In these cases, a single data protection officer may be designated for several such authorities or bodies, taking account of their organisational structure and size.","[1] designate a data protection officer. The data protection officer may act for such associations and other bodies 
+representing controllers or processors. 
+5. The data protection officer shall be designated on the basis of professional qualities and, in particular, expert 
+knowledge of data protection law and practices and the ability to fulfil the tasks referred to in Article 39.
+
+[2] nature, their scope and/or their purposes, require regular and systematic monitoring of data subjects on a large scale; 
+or 
+(c)  the core activities of the controller or the processor consist of processing on a large scale of special categories of 
+data pursuant to Article 9 and personal data relating to criminal convictions and offences referred to in Article 10. 
+2. A group of undertakings may appoint a single data protection officer provided that a data protection officer is
+
+[3] Article 39 
+Tasks of the data protection officer 
+1. The data protection officer shall have at least the following tasks: 
+(a)  to inform and advise the controller or the processor and the employees who carry out processing of their 
+obligations pursuant to this Regulation and to other Union or Member State data protection provisions; 
+(b)  to monitor compliance with this Regulation, with other Union or Member State data protection provisions and with
+
+[4] 6. The data protection officer may be a staff member of the controller or processor, or fulfil the tasks on the basis of 
+a service contract. 
+7. The controller or the processor shall publish the contact details of the data protection officer and communicate 
+them to the supervisory authority. 
+Article 38 
+Position of the data protection officer 
+1. The controller and the processor shall ensure that the data protection officer is involved, properly and in a timely
+
+[5] personal data and to the exercise of their rights under this Regulation. 
+5. The data protection officer shall be bound by secrecy or confidentiality concerning the performance of his or her 
+tasks, in accordance with Union or Member State law. 
+6. The data protection officer may fulfil other tasks and duties. The controller or processor shall ensure that any such 
+tasks and duties do not result in a conflict of interests. 
+Article 39 
+Tasks of the data protection officer
+
+[6] regarding the exercise of those tasks. He or she shall not be dismissed or penalised by the controller or the processor for 
+performing his tasks. The data protection officer shall directly report to the highest management level of the controller 
+or the processor. 
+4. Data subjects may contact the data protection officer with regard to all issues related to processing of their 
+personal data and to the exercise of their rights under this Regulation.
+
+[7] and (f) of this paragraph is provided to the data subjects in addition to Articles 13 and 14; 
+(h)  the tasks of any data protection officer designated in accordance with Article 37 or any other person or entity in 
+charge of the monitoring compliance with the binding corporate rules within the group of undertakings, or group 
+of enterprises engaged in a joint economic activity, as well as monitoring training and complaint-handling; 
+(i)  the complaint procedures;
+
+[8] and the protection required for the personal data processed by the controller or the processor. Such data 
+protection officers, whether or not they are an employee of the controller, should be in a position to perform 
+their duties and tasks in an independent manner. 
+(98)  Associations or other bodies representing categories of controllers or processors should be encouraged to draw 
+up codes of conduct, within the limits of this Regulation, so as to facilitate the effective application of this
+
+[9] easily accessible from each establishment. 
+3. Where the controller or the processor is a public authority or body, a single data protection officer may be 
+designated for several such authorities or bodies, taking account of their organisational structure and size. 
+4. In cases other than those referred to in paragraph 1, the controller or processor or associations and other bodies 
+representing categories of controllers or processors may or, where required by Union or Member State law shall,
+
+[10] Section 4 
+Dat a protection off icer 
+Article 37 
+Designation of the data protection officer 
+1. The controller and the processor shall designate a data protection officer in any case where: 
+(a)  the processing is carried out by a public authority or body, except for courts acting in their judicial capacity; 
+(b)  the core activities of the controller or the processor consist of processing operations which, by virtue of their",1,
+D-009,Does a company that watches a busy public square with cameras on a big scale have to do an impact assessment first?,Yes. A data protection impact assessment is required in particular for systematic monitoring of a publicly accessible area on a large scale.,"Yes, a company that watches a busy public square with cameras on a big scale has to do an impact assessment first. This is indicated in the passages where it states that impact assessment is required for monitoring publicly accessible areas on a large scale, especially when using optic-electronic devices or for any other operations where the competent supervisory authority considers that the processing is likely to result in a high risk to the rights and freedoms of data subjects.","[1] impact assessment is equally required for monitoring publicly accessible areas on a large scale, especially when 
+using optic-electronic devices or for any other operations where the competent supervisory authority considers 
+that the processing is likely to result in a high risk to the rights and freedoms of data subjects, in particular 
+because they prevent data subjects from exercising a right or using a service or a contract, or because they are
+
+[2] impact assessment to be broader than a single project, for example where public authorities or bodies intend to 
+establish a common application or processing platform or where several controllers plan to introduce a common 
+application or processing environment across an industry sector or segment or for a widely used horizontal 
+activity. 
+(93)  In the context of the adoption of the Member State law on which the performance of the tasks of the public
+
+[3] in order to assess the particular likelihood and severity of the high risk, taking into account the nature, scope, 
+context and purposes of the processing and the sources of the risk. That impact assessment should include, in 
+particular, the measures, safeguards and mechanisms envisaged for mitigating that risk, ensuring the protection of 
+personal data and demonstrating compliance with this Regulation.
+
+[4] (c)  a systematic monitoring of a publicly accessible area on a large scale. 
+4. The supervisory authority shall establish and make public a list of the kind of processing operations which are 
+subject to the requirement for a data protection impact assessment pursuant to paragraph 1. The supervisory authority 
+shall communicate those lists to the Board referred to in Article 68.",1,
+D-012,Which authorities have a seat on the EU-level board (EDPB) that coordinates the national data protection regulators?,"The head of one supervisory authority of each Member State and the European Data Protection Supervisor, or their representatives.","The Board is composed of the head of one supervisory authority of each Member State and of the European Data Protection Supervisor, or their respective representatives.","[1] Such bodies could comprise data protection authorities, cybersecurity, eID and standardisation bodies, as well as 
+bodies and expert groups under Regulations (EU) 2022/868, (EU) 2023/2854 and (EU) 2024/1689 and Regulation 
+(EU) 2019/881 of the European Parliament and of the Council (21). The EHDS Board should operate independently, 
+in the public interest and in line with its code of conduct.
+
+[2] Section 3 
+European dat a protection board 
+Article 68 
+European Data Protection Board 
+1. The European Data Protection Board (the ‘Board’) is hereby established as a body of the Union and shall have legal 
+personality. 
+2. The Board shall be represented by its Chair. 
+3. The Board shall be composed of the head of one supervisory authority of each Member State and of the European 
+Data Protection Supervisor, or their respective representatives.
+
+[3] designate a data protection officer. The data protection officer may act for such associations and other bodies 
+representing controllers or processors. 
+5. The data protection officer shall be designated on the basis of professional qualities and, in particular, expert 
+knowledge of data protection law and practices and the ability to fulfil the tasks referred to in Article 39.
+
+[4] lay down rules at national level to ensure the coordinated participation of those bodies in the European Health Data 
+Space Board (the ‘EHDS Board’). That Member State should, in particular, designate one health data access body to 
+function as a single contact point for the effective participation of those bodies, and ensure swift and smooth 
+cooperation with other health data access bodies, the EHDS Board and the Commission. Health data access bodies
+
+[5] Article 80 
+Representation of data subjects 
+1. The data subject shall have the right to mandate a not-for-profit body, organisation or association which has been 
+properly constituted in accordance with the law of a Member State, has statutory objectives which are in the public 
+interest, and is active in the field of the protection of data subjects' rights and freedoms with regard to the protection of
+
+[6] easily accessible from each establishment. 
+3. Where the controller or the processor is a public authority or body, a single data protection officer may be 
+designated for several such authorities or bodies, taking account of their organisational structure and size. 
+4. In cases other than those referred to in paragraph 1, the controller or processor or associations and other bodies 
+representing categories of controllers or processors may or, where required by Union or Member State law shall,
+
+[7] data are being transferred; 
+(b)  the existence and effective functioning of one or more independent supervisory authorities in the third country or to 
+which an international organisation is subject, with responsibility for ensuring and enforcing compliance with the 
+data protection rules, including adequate enforcement powers, for assisting and advising the data subjects in 
+exercising their rights and for cooperation with the supervisory authorities of the Member States; and
+
+[8] (a) cooperate with supervisory authorities under Regulation (EU) 2016/679 in relation to personal electronic health data 
+and the EHDS Board;
+(b) cooperate with all relevant stakeholders, including patient organisations, representatives of natural persons, health 
+professionals, researchers, and ethics committees, where applicable in accordance with Union or national law;
+(c) cooperate with other national competent bodies, including the national competent authorities supervising data altruism
+
+[9] controller or of the data subject in the field of employment and social security and social protection law in so far as 
+it is authorised by Union or Member State law or a collective agreement pursuant to Member State law providing for 
+appropriate safeguards for the fundamental rights and the interests of the data subject; 
+(c)  processing is necessary to protect the vital interests of the data subject or of another natural person where the data
+
+[10] 3. The representative shall be established in one of the Member States where the data subjects, whose personal data 
+are processed in relation to the offering of goods or services to them, or whose behaviour is monitored, are. 
+4. The representative shall be mandated by the controller or processor to be addressed in addition to or instead of 
+the controller or the processor by, in particular, supervisory authorities and data subjects, on all issues related to",1,
+D-015,Which types of medical records get priority for electronic exchange under the EHDS?,"Patient summaries, electronic prescriptions and dispensations, medical imaging studies and imaging reports, medical test results such as laboratory results, and discharge reports. They were selected by the eHealth Network as most relevant for most healthcare situations.","The priority categories of personal electronic health data for electronic exchange include patient summaries, electronic prescriptions, electronic dispensations, medical imaging studies and related imaging reports, and medical test results such as laboratory results and related reports.","[1] electronic health record exchange format to additional categories of personal electronic health data referred to in 
+Article 14(1), third subparagraph. Those implementing acts shall be adopted in accordance with the examination procedure 
+referred to in Article 98(2).
+4. Member States shall ensure that the priority categories of personal electronic health data referred to in Article 14 are
+
+[2] exchange shall be based on the European electronic health record exchange format.
+Where Member States provide for additional categories of personal electronic health data under Article 14(1), third 
+subparagraph, the national contact point for digital health shall enable the exchange of the additional categories of personal 
+electronic health data referred to in Article 14(1), third subparagraph, insofar as the Member State concerned has provided
+
+[3] categories of electronic health data is needed. Categories of electronic health data such as patient summaries, 
+electronic prescriptions and dispensations, medical imaging studies and related imaging reports, medical test results 
+such as laboratory results and related reports, and discharge reports have been selected by the eHealth Network as 
+most relevant for the majority of healthcare situations and should be considered as priority categories for Member
+
+[4] — data quality requirements for the registration of personal electronic health data in an EHR system,
+— cross-border specifications for priority categories of personal electronic health data,
+— technical specifications for the categories of personal electronic health data, setting out the European electronic 
+health record exchange format,
+— updates of the European electronic health record exchange format to integrate relevant revisions of the 
+healthcare coding systems and nomenclatures,
+
+[5] (a) the characteristic is relevant for healthcare provided to natural persons;
+(b) the characteristic is used in the majority of Member States according to the most recent information.
+Article 15
+European electronic health record exchange format
+1. By 26 March 2027, the Commission shall, by means of implementing acts, lay down the technical specifications for 
+the priority categories of personal electronic health data referred to in Article 14(1), setting out the European electronic
+
+[6] quality requirements. The European electronic health record exchange format should form the basis for 
+specifications related to the registration and exchange of electronic health data.
+(28) Telemedicine is becoming an increasingly important tool that can provide patients with access to care and tackle 
+inequities. It has the potential to reduce health inequalities and reinforce the free movement of Union citizens across
+
+[7] Article 14
+Priority categories of personal electronic health data for primary use
+1. For the purposes of this Chapter, where data are processed in electronic format the priority categories of personal 
+electronic health data shall be the following:
+(a) patient summaries;
+(b) electronic prescriptions;
+(c) electronic dispensations;
+(d) medical imaging studies and related imaging reports;
+(e) medical test results, including laboratory and other diagnostic results and related reports; and
+
+[8] electronic copy of at least the personal electronic health data in the priority categories referred to in Article 14 related to 
+those natural persons, through the electronic health data access services referred to in Article 4, in the European electronic 
+health record exchange format referred to in Article 15.
+3. In accordance with Article 23 of Regulation (EU) 2016/679, Member States may restrict the scope of rights provided
+
+[9] electronic health data as well as additional categories supported by the European electronic health record exchange 
+format. Those specifications should be defined by means of implementing acts and should be based on the 
+cross-border specifications of the European electronic health record exchange format, complemented by further 
+specifications on cybersecurity, technical and semantic interoperability, operations and service management.
+
+[10] European health datasets of a high quality. The use of a European electronic health record exchange format should 
+become more widespread at Union and national level. The European electronic health record exchange format could 
+allow for different profiles for its use at the level of EHR systems and at the level of the national contact points for 
+digital health in MyHealth@EU for cross-border data exchange.",0,
+D-020,"If I spot a mistake in my electronic health record, can I get it corrected online, and does that cost anything?","Yes. People should be able to request rectification of incorrect data online, immediately and free of charge, through an electronic health data access service; the request is then handled by the controllers under the GDPR.","Yes, you can request the rectification of your personal electronic health data online through an electronic health data access service. The rectification requests should be treated by the relevant controllers in line with Regulation (EU) 2016/679, if necessary involving health professionals. This correction is immediate and free of charge.","[1] persons should be able to request online the rectification of the incorrect personal electronic health data, 
+immediately and free of charge, through an electronic health data access service. Such rectification requests should 
+then be treated by the relevant controllers in line with Regulation (EU) 2016/679, if necessary involving health 
+professionals with a relevant specialisation and responsible for the natural persons’ treatment.
+
+[2] complement personal electronic health data should not entitle them to change personal electronic health data which 
+have been provided by health professionals.
+(13) Enabling natural persons to more easily and quickly access their personal electronic health data will enable them to 
+notice possible errors such as incorrect information or incorrectly attributed patient records. In such cases, natural
+
+[3] electronic health data and related information inserted by health professionals.
+Article 6
+Right of natural persons to rectification
+Electronic health data access services referred to in Article 4 shall enable natural persons to easily request online the 
+rectification of their personal electronic health data in accordance with Article 16 of Regulation (EU) 2016/679. Where
+
+[4] data users should be encouraged to report critical errors in datasets to health data access bodies. To support the 
+improvement of the initial database and further use of the enriched dataset, Member States should be able to 
+establish rules for the processing and the use of electronic health data containing improvements related to the 
+processing of those data. The improved dataset should be made available free of charge to the original health data
+
+[5] Each Member State is solely responsible for data and services in that Member State. This Regulation provides the 
+legal basis for the processing of personal electronic health data in MyHealth@EU as a task carried out in the public 
+interest assigned by Union law referred to in Article 6(1), point (e), of Regulation (EU) 2016/679. That processing is 
+necessary for the provision of healthcare in cross-border situations, as mentioned in Article 9(2), point (h), of that 
+Regulation.
+
+[6] this Regulation. This should not affect the obligation to make personal electronic health data, registered after the 
+date of application of this Regulation, available in an electronic format.
+(12) In order to complement the information available to them, natural persons should be able to add electronic health 
+data to their EHRs or to store additional information in their separate personal health record which could be
+
+[7] digital health in MyHealth@EU for cross-border data exchange.
+(27) While EHR systems are widespread, the level of digitalisation of health data varies in Member States depending on 
+data categories and on the coverage of healthcare providers that register health data in electronic format. In order to 
+support the application of data subjects’ rights of access to and exchange of electronic health data, Union action is
+
+[8] personal electronic health data referred to in Article 14 in an electronic format in an EHR system.
+2. When processing data in an electronic format, healthcare providers shall ensure that the personal electronic health 
+data of the natural persons under their treatment are updated with information related to the healthcare.
+3. Where personal electronic health data are registered in a Member State of treatment that differs from the Member
+
+[9] in that matter.
+4. Digital health authorities in the Member States concerned shall cooperate to handle and resolve complaints related to 
+cross-border exchange of and access to personal electronic health data, including by exchanging all relevant information by 
+electronic means, without undue delay.
+5. Digital health authorities shall facilitate the submission of complaints and provide easily accessible tools for the 
+submission of complaints.
+Article 22
+
+[10] (g) ‘registration of electronic health data’ means the recording of health data in an electronic format, through the manual 
+entry of such data, through the collection of such data by a device, or through the conversion of non-electronic health 
+data into an electronic format, to be processed in an EHR system or a wellness application;
+(h) ‘electronic health data access service’ means an online service, such as a portal or an application for mobile devices,",1,
+D-030,"What does pseudonymisation mean in the GDPR, and when must the EHDS provide anonymised rather than pseudonymised data to researchers?","Pseudonymisation: processing so data can no longer be attributed to a specific person without additional information kept separately and protected. Under the EHDS, health data access bodies must provide anonymised data whenever the user's purpose can be achieved with anonymised data.","Pseudonymization means processing personal data in such a way that the individual is not directly or indirectly identified. In the GDPR, pseudonymization can be used for statistical or research purposes.
+
+According to Article 67 of the EHDS document, health data access bodies should provide access to electronic health data in pseudonymised format unless they intend to bring datasets already held by them into an anonymised format as per Article 68(1), point (c). In such cases, anonymized data must be provided. Therefore, EHDS must provide anonymised rather than pseudonymised data when the processing cannot be carried out using anonymised data.","[1] the processing of such anonymous information, including for statistical or research purposes. 
+(27)  This Regulation does not apply to the personal data of deceased persons. Member States may provide for rules 
+regarding the processing of personal data of deceased persons. 
+(28)  The application of pseudonymisation to personal data can reduce the risks to the data subjects concerned and
+
+[2] to delegate those tasks to processors. When providing access to a pseudonymised or anonymised dataset, a health 
+data access body should use state-of-the-art pseudonymisation or anonymisation technology and standards, 
+ensuring to the maximum extent possible that natural persons cannot be re-identified by health data users. Such 
+technology and standards for data pseudonymisation or anonymisation should be further developed. Health data
+
+[3] available in pseudonymised format. Taking into account the specific purposes of the processing, personal electronic 
+health data should be pseudonymised or anonymised as early as possible in the process of making data available for 
+secondary use. It should be possible for pseudonymisation and anonymisation to be carried out by health data access 
+bodies or by health data holders. As controllers, health data access bodies and health data holders should be allowed
+
+[4] order to ensure respect for the principle of data minimisation. Those measures may include pseudonymisation provided 
+that those purposes can be fulfilled in that manner. Where those purposes can be fulfilled by further processing which 
+does not permit or no longer permits the identification of data subjects, those purposes shall be fulfilled in that manner. 
+2. Where personal data are processed for scientific or historical research purposes or statistical purposes, Union or
+
+[5] from authorised participants in HealthData@EU referred to in Article 75;
+(e) a description explaining whether the electronic health data need to be made available in a pseudonymised or 
+anonymised format; in the case of a pseudonymised format, a justification as to why the processing cannot be carried 
+out using anonymised data;
+(f) where the health data applicant intends to bring datasets already held by that health data applicant into the secure
+
+[6] anonymised data in accordance with Article 68(1), point (c), health data access bodies shall provide access to electronic 
+health data in pseudonymised format. The information necessary to reverse the pseudonymisation shall be available only to 
+the health data access body or an entity that acts as a trusted third party in accordance with national law.
+Article 67
+Health data access applications
+
+[7] security appropriate to the risk, including inter alia as appropriate: 
+(a)  the pseudonymisation and encryption of personal data; 
+4.5.2016 L 119/51 Official Journal of the European Union EN
+
+[8] data permit. In that regard, health data access bodies should cooperate across borders to develop and exchange best 
+practices and techniques. This includes rules for pseudonymisation and anonymisation of micro datasets. When 
+relevant, the Commission should set out the procedures and requirements, and provide technical tools, for a unified 
+procedure for pseudonymising and anonymising electronic health data.
+
+[9] controller not established in the Union, such as in a Member State's diplomatic mission or consular post. 
+(26)  The principles of data protection should apply to any information concerning an identified or identifiable natural 
+person. Personal data which have undergone pseudonymisation, which could be attributed to a natural person by 
+the use of additional information should be considered to be information on an identifiable natural person. To
+
+[10] help controllers and processors to meet their data-protection obligations. The explicit introduction of ‘pseudony­
+misation’ in this Regulation is not intended to preclude any other measures of data protection. 
+(29) In order to create incentives to apply pseudonymisation when processing personal data, measures of pseudonymi­
+sation should, whilst allowing general analysis, be possible within the same controller when that controller has",0,
+D-031,"If I have opted out of the EHDS access services, can my data still be used in an emergency, and what GDPR condition applies?","Yes. Member States may allow access where necessary to protect vital interests under GDPR Art. 9(2)(c), even after an opt-out. That GDPR condition covers protecting the vital interests of the person or another person where the person is physically or legally incapable of consenting.","If you have opted out of the EHDS access services, your data cannot be used for secondary use under this Regulation. However, it is possible to access the data generated during the period of the opt-out in emergency situations, provided that the processing does not violate the right to protect vital interests as referred to in Article 9(2) of Regulation (EU) 2016/679.","[1] electronic health data by anyone other than the original controller, without any possibility to override that opt-out in 
+emergency situations. In such a case, Member States should establish the rules and specific safeguards regarding such 
+opt-out mechanisms. Those rules and specific safeguards could also relate to specific categories of personal 
+electronic health data, for example genetic data. The right to opt out means that personal electronic health data
+
+[2] right to opt out, healthcare providers will still document the treatment provided in accordance with applicable rules, 
+and will be able to access the data registered by them. Natural persons who exercise the right to opt out should be 
+able to reverse their decision. In such cases, personal electronic health data generated during the period of the 
+opt-out might not be available via the access services and MyHealth@EU.
+
+[3] secondary use under this Regulation, in the form of a right to opt out from having those data being made available 
+for secondary use. An easily understandable and accessible user-friendly mechanism to exercise that right to opt out 
+should be provided for. Moreover, it is imperative to provide natural persons with sufficient and complete 
+information regarding their right to opt out, including on the benefits and drawbacks entailed by exercising that
+
+[4] Article 71
+Right to opt out from the processing of personal electronic health data for secondary use
+1. Natural persons shall have the right to opt out at any time, and without providing any reason, from the processing of 
+personal electronic health data relating to them for secondary use under this Regulation. The exercise of that right shall be 
+reversible.
+2. Member States shall provide for an accessible and easily understandable opt-out mechanism to exercise the right
+
+[5] that the healthcare provider cannot take the data into account when providing health services. The restrictions on 
+access to personal electronic health data could have life-threatening consequences and, therefore, access to those data 
+should nevertheless be possible where necessary to protect vital interests in emergency situations. More specific legal 
+provisions on the mechanisms of restrictions placed by natural persons on parts of their personal electronic health
+
+[6] details of the data permit regarding the purposes for processing such data as referred to in Article 53(1);
+(g) the results or outcomes of the projects for which the electronic health data were used.
+2. If a Member State has provided for the right to opt out pursuant to Article 71 to be exercised through the health data 
+access bodies, the relevant health data access bodies shall provide public information about the procedure to opt out and 
+facilitate the exercise of that right.
+
+[7] opt-out might not be available via the access services and MyHealth@EU.
+(19) Timely and full access by health professionals to the medical records of patients is fundamental for ensuring 
+continuity of care, avoiding duplications and errors, and reducing costs. However, due to a lack of interoperability, in 
+many cases health professionals cannot access the complete medical records of their patients and cannot make
+
+[8] protect the vital interests of the data subject or of another natural person as referred to in Article 9(2), point (c), of 
+Regulation (EU) 2016/679, even if the patient has exercised the right to opt out in primary use.
+Article 11
+Access by health professionals to personal electronic health data
+1. Where health professionals process data in an electronic format, they shall have access to the relevant and necessary
+
+[9] otherwise processed pursuant to data permits issued under Article 68 or health data requests under Article 69 approved 
+after the natural person has exercised the right to opt out.
+The first subparagraph of this paragraph shall not affect the processing for secondary use of personal electronic health data 
+relating to those natural persons pursuant to data permits or health data requests that were issued or approved before the 
+natural persons exercised their right to opt out.
+
+[10] Article 54
+Prohibited secondary use
+Health data users shall only process electronic health data for secondary use on the basis of and in accordance with the 
+purposes contained in a data permit issued pursuant to Article 68, health data requests approved pursuant to Article 69 or, 
+in situations referred to in Article 67(3), an access approval from the relevant authorised participant in HealthData@EU 
+referred to in Article 75.",0,
+D-034,"Can patients refuse to have their health data used, both for their own care through the access services and for research reuse?","For primary use, an opt-out exists only if a Member State's law provides it (and it must be reversible). For secondary use, natural persons always have the right to opt out at any time without giving reasons; it is reversible.","Article 54 states that Health Data Users shall only process electronic health data for secondary use on the basis of and in accordance with the purposes contained in a data permit issued pursuant to Article 68, health data requests approved pursuant to Article 69 or, in situations referred to in Article 67(3), an access approval from the relevant authorised participant in HealthData@EU referred to in Article 75. This implies that patients can refuse their health data being used for secondary use as it requires a permit or approval.
+
+However, there is no passage explicitly stating whether patients have the right to refuse both access services and research reuse of their health data. The passages focus more on the processing and usage conditions rather than patient rights regarding refusal. Therefore, based solely on the provided information, we cannot definitively answer if patients can refuse both types of uses.","[1] body shall refuse access to the health data applicant to such data. The health data access body shall inform the health data 
+applicant of, and provide to the health data applicant a justification for, that refusal. Health data holders and health data 
+applicants shall have the right to lodge a complaint in accordance with Article 81 of this Regulation.
+Article 53
+Purposes for which electronic health data can be processed for secondary use
+
+[2] ethics bodies to be part of the health data access body. The health data access body, and where relevant health data 
+holders, should assist health data users in the selection of the suitable datasets or data sources for the intended 
+purpose of secondary use. Where the health data applicant needs data in an anonymised statistical format, it should 
+submit a health data request, requiring the health data access body to provide the result directly. A refusal of a data
+
+[3] Article 67(3), health data access bodies and relevant authorised participants in HealthData@EU referred to in Article 75 
+shall remain responsible for adopting decisions to grant or refuse access to electronic health data within their remit in 
+accordance with this Chapter.
+The health data access bodies and authorised participants in HealthData@EU concerned shall inform each other of their
+
+[4] Article 68.
+2. Health data access bodies shall provide electronic health data in an anonymised format, where the purpose of 
+processing by the health data user can be achieved with such data, taking into account the information provided by the 
+health data user.
+3. Where the health data user has sufficiently demonstrated that the purpose of processing cannot be achieved with
+
+[5] Article 61
+Duties of health data users
+1. Health data users may access and process the electronic health data referred to in Article 51 for secondary use only in 
+accordance with a data permit issued pursuant to Article 68, a health data request approved pursuant to Article 69 or, in 
+situations referred to in Article 67(3), an access approval from the relevant authorised participant in HealthData@EU 
+referred to in Article 75.
+
+[6] users should not attempt to re-identify natural persons from the dataset provided under this Regulation, and where 
+they do so they should be subject to administrative fines and enforcement measures laid down in this Regulation or 
+possible criminal penalties, where national law so provides. Moreover, a health data applicant should be able to 
+request a response to a health data request in an anonymised statistical format. In such cases, the health data user
+
+[7] being made available for secondary use pursuant to data permits.
+(67) Natural persons should be informed by the health data holders about significant findings related to their health made 
+by health data users. Natural persons should have the right to request not to be informed of such findings. Member 
+States could lay down conditions on the arrangements for the provision by the health data holders of such
+
+[8] application or health data request. When such an override is applied, the safeguards under Chapter IV should 
+continue to be applied by health data users, in particular the prohibition of re-identification or attempting to 
+re-identify the natural persons concerned.
+(55) In the context of the EHDS, electronic health data already exist and are being collected by, among others, healthcare
+
+[9] Article 54
+Prohibited secondary use
+Health data users shall only process electronic health data for secondary use on the basis of and in accordance with the 
+purposes contained in a data permit issued pursuant to Article 68, health data requests approved pursuant to Article 69 or, 
+in situations referred to in Article 67(3), an access approval from the relevant authorised participant in HealthData@EU 
+referred to in Article 75.
+
+[10] have a wide access to data. When accessing data relating to their patients, health professionals should comply with 
+the applicable law, codes of conduct, deontological guidelines or other provisions governing ethical conduct with 
+respect to sharing or accessing information, particularly in life-threatening or extreme situations. In accordance with 
+Regulation (EU) 2016/679, in order to limit their access to what is relevant in a specific episode of care, healthcare",0,

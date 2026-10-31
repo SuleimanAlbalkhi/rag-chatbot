@@ -1,0 +1,43 @@
+{
+  "run_name": "baseline",
+  "mode": "full",
+  "started": "2026-10-31T15:26:05+00:00",
+  "testset": {
+    "path": "eval/dev.jsonl",
+    "sha256": "b58c4f4f6835f8f8bda209874ef19d31050de1a8f3389c0d58cfc1b5afcb299e",
+    "items": 50
+  },
+  "git": {
+    "commit": "0eeb3c2f8e60cbc4217cf2e662ebbd4461960518",
+    "dirty": true,
+    "changed_files": [
+      "M CLAUDE.md",
+      " M DECISIONS.md",
+      "?? eval/judge.py",
+      "?? eval/judge_agreement.py",
+      "?? eval/metrics.py",
+      "?? eval/report.py",
+      "?? eval/run_eval.py",
+      "?? tests/test_eval_metrics.py"
+    ]
+  },
+  "retrieval_k": 10,
+  "config": {
+    "_ROOT": "D:\\Suleiman\\AI_Engineering\\rag-chatbot",
+    "DOCUMENTS_DIR": "D:\\Suleiman\\AI_Engineering\\rag-chatbot\\documents",
+    "VECTOR_STORE_DIR": "D:\\Suleiman\\AI_Engineering\\rag-chatbot\\vector_store",
+    "COLLECTION_NAME": "rag_documents",
+    "OLLAMA_BASE_URL": null,
+    "LLM_MODEL": "qwen2.5:3b",
+    "EMBED_MODEL": "nomic-embed-text",
+    "LLM_TEMPERATURE": 0.0,
+    "NUM_CTX": 8192,
+    "NUM_PREDICT": 1024,
+    "CHUNK_SIZE": 500,
+    "CHUNK_OVERLAP": 100,
+    "TOP_K": 10,
+    "SCORE_THRESHOLD": 0.65,
+    "MAX_HISTORY_TURNS": 10
+  },
+  "finished": "2026-10-31T15:29:28+00:00"
+}

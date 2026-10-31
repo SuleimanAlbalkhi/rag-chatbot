@@ -602,3 +602,208 @@ Three review findings are intentionally not fixed in the review-fixes branch:
 **Consequences**
 - Known limitations are documented in the README (Limitations) and CLAUDE.md.
 - Order of follow-up: M7 (first eval experiment), then threshold calibration, M5 (multi-turn eval), M3 (Docker phase).
+
+---
+
+## D-021 — DEV evaluation set: 50 Claude-generated questions with verified page-level evidence
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+`eval/dev.jsonl` holds 50 English questions over `ehds.pdf` and `gdpr.pdf`, one JSON object per line:
+`id` (D-001…), `question`, `type` (`single` | `multi` | `unanswerable`), `ground_truth`,
+`evidence` (list of `{file, page, quote}`; empty for unanswerable) and `note` (article/recital reference;
+for unanswerable, the reason and `Searched: term; term; …`).
+
+- **Provenance:** questions, ground truths and evidence were **generated with Claude** (not hand-written),
+  then verified automatically (below) and reviewed for duplicates and label quality. The holdout set was
+  generated the same way in a separate session that never saw the experiments; the review found 3 holdout
+  questions duplicating dev questions, which were replaced.
+- **Mix:** 25 single, 10 multi (6 across both documents, 4 two places in one document), 15 unanswerable
+  (13 near miss, 2 off-topic; an item is off-topic when its note starts with "Off-topic").
+- **Coverage:** 12 GDPR and 13 EHDS single items; 20 GDPR and 21 EHDS evidence quotes; recitals (12 items),
+  articles and EHDS Annex I; beginning / middle / end of each PDF (EHDS 5/14/7, GDPR 4/15/4 quotes).
+- **Pages** are 1-based physical pages, exactly as the app cites them (D-011). **Quotes** are verbatim
+  (≥ 10 words) and avoid page headers/footers.
+- **Questions** are paraphrased user questions: no 4+ consecutive words shared with any of their quotes.
+- **Single** means one passage suffices. Where a single item lists two quotes, both are on the same page.
+  Two single items (D-003, D-015) cite a recital that states the same rule as an article; the note names
+  the article and its page, so an evaluation can accept either.
+- `eval/verify_testset.py` enforces all of the above against the PDFs, loaded with the app's own loader
+  (`ingest.load_pdf`), and writes `eval/review_dev.md` (git-ignored) for human review. Unanswerable items
+  are checked by whole-word term search over both PDFs; hits are listed, not failed.
+
+**Alternatives**
+- Unconstrained chunk-based generation (e.g. RAGAS test-set generation) without overlap limits or verification.
+- Questions written by hand or collected from real users.
+- Chunk-id-level gold labels instead of page-level evidence.
+- A larger set without manual verification.
+
+**Rationale**
+- Generated questions are cheap, but chunk-based generators tend to reuse the chunk's wording, which flatters
+  retrieval. Enforcing paraphrase (no 4+ word overlap with the quote) avoids that bias.
+- Page-level evidence stays valid when chunking changes (chunk ids do not, D-012), so the same set can
+  evaluate the prefix and threshold experiments (D-003, D-014) and later chunking changes.
+- Near-miss unanswerables test the refusal path where it is hardest: the topic is retrieved with high
+  similarity but the specific fact is absent. Several are designed to tempt a wrong answer from a nearby
+  fact (e.g. D-047: GDPR's age 16 for online consent vs. no age for EHDS health-record access).
+- Cross-document multi items exercise the EHDS's references into the GDPR (fines, Art. 9 exceptions,
+  portability, pseudonymisation), which is the realistic hard case for this corpus (D-002).
+- Automatic verification makes the gold data checkable and repeatable instead of trusted.
+
+**Consequences**
+- 50 items give coarse estimates (one item = 2 percentage points); differences of a few points between
+  experiments are noise. A separate held-out set is needed for final numbers, so the dev set can be used
+  freely for tuning.
+- Ground truths were generated with Claude from the cited passages; they are reviewed via
+  `eval/review_dev.md`. The set stays synthetic: accurate against the PDFs, not representative of real users.
+- Retrieval metrics should count a hit on any listed evidence page for single items and require all
+  listed pages for multi items; unanswerable items are scored on refusal only.
+- No retrieval or model has been run on these questions yet, so the baseline is untouched.
+
+---
+
+## D-022 — Minimal evaluation harness: runs, page-level metrics, retrieval threshold curve, CLI judge
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+- `eval/run_eval.py` stores, per question, the **unfiltered** top-10 chunks (id, file, page, score, rank); in full
+  mode also `answer()` at the configured threshold with **temperature 0** (answer, refused, error, source ids,
+  latency). Each run lives in `eval/runs/<name>/` with `meta.json` (full config, git commit + dirty flag and
+  changed files, test-set sha256). An existing run directory aborts the run; reading `eval/holdout/` needs `--final`.
+- `eval/report.py` writes `RESULTS.md` into the run directory. Metrics, all as "X of N (pct)":
+  Recall@1/3/5/10 and MRR on answerable items at **page level**; a single item hits when any evidence page (or the
+  equivalent article page named in its note, D-021) appears; a multi item only when **all** its pages appear
+  within k. MRR uses the first relevant chunk.
+- Threshold curve 0.40–0.80 is computed from the unfiltered top score (**retrieval-level refusal** only), so one
+  retrieval-only run shows the trade-off without re-running the LLM.
+- `eval/judge.py` uses `claude -p` with the subscription login: fresh empty temp dir, own system prompt,
+  `--tools ""`, `--strict-mcp-config`, `--disable-slash-commands`, `--setting-sources local`,
+  `--no-session-persistence`, `--json-schema {correct, faithful, reason}`; blind (no run/model/config in the
+  prompt). Only answered answerable items are judged; unanswerable items are scored by `refused`. It writes a
+  10-item human labelling form (fixed seed, without the judge's verdicts); `eval/judge_agreement.py` reports raw
+  agreement and Cohen's kappa.
+
+**Alternatives**
+- RAGAS / DeepEval frameworks; chunk-level gold labels; an Ollama model as judge; recomputing the threshold curve
+  with full end-to-end runs per threshold.
+
+**Rationale**
+- A few hundred lines with no new dependencies are easy to audit; the metrics are pure functions with unit tests.
+- Page-level gold survives chunking changes (D-021). Unfiltered retrieval separates ranking quality from the
+  threshold, and one run feeds both recall and the threshold curve.
+- A judge from a different model family than the generator avoids self-preference; the neutral, tool-less, blind
+  setup keeps project context and the run identity out of the verdict. Human labels on a sample tell whether the
+  judge can be trusted at all.
+
+**Consequences**
+- The threshold curve ignores LLM-level `NO_ANSWER` refusals above the threshold; end-to-end refusal rates exist
+  only at the configured threshold.
+- The `claude -p` judge depends on a valid CLI login (it had expired on 2026-10-31) and uses subscription quota;
+  its model alias (`sonnet`) resolves to whatever is current, and the resolved model is recorded per verdict.
+- 10 labelled items give a rough kappa only; it decides whether the judge is usable, not how good it is.
+- Latency depends on the local machine and on Ollama's model being loaded; the first question includes load time.
+
+---
+
+## D-023 — Keep embeddings without nomic task prefixes (E-001 rejected)
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+`RAG_EMBED_PREFIXES` stays off by default. The option remains in the code (`models.PrefixedEmbeddings`, collection
+metadata `embed_prefixes`, startup mismatch check) so the experiment can be repeated with other settings. The
+baseline threshold (0.65) is unchanged; no new threshold is proposed because the acceptance rule was not met.
+
+**Alternatives**
+- Adopt prefixes anyway because the model card recommends them.
+- Remove the option again.
+
+**Rationale**
+- Pre-registered rule (Recall@5 +2 and MRR not lower) failed: Recall@5 19 → 17 of 35, MRR 0.482 → 0.414 (E-001).
+- Keeping the switch costs little and the metadata check prevents mixing prefixed and unprefixed stores.
+
+**Consequences**
+- Review finding M7 is closed as "tested, not beneficial on the dev set".
+- `vector_store_prefixes/` exists locally (git-ignored) and can be deleted or reused.
+- Retrieval quality remains the main weakness (Recall@10 22 of 35, multi 1 of 10); the next experiments should
+  target recall (chunking, top-k, query rewriting) rather than the embedding prefix.
+
+---
+
+## D-024 — Final configuration = baseline; threshold stays 0.65
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+No experiment was accepted (E-001 rejected), so the baseline configuration (E-000) is final for the holdout run:
+qwen2.5:3b, nomic-embed-text without prefixes, top-k 10, chunks 500/100, **cosine threshold 0.65**.
+
+**Alternatives**
+- 0.70: refuses more unanswerable questions at retrieval level (7 of 15 vs. 4 of 15) but also 6 of 35 answerable.
+- 0.60 or lower: no false refusals, but only 2 of 15 (0.60) or fewer correct refusals at retrieval level.
+- No threshold, relying only on the LLM's `NO_ANSWER`.
+
+**Rationale**
+- Rule: the highest threshold with **at most 1 false refusal on answerable questions** at retrieval level. On the
+  baseline curve (`eval/runs/baseline-retrieval`) that is 0.65: 1 of 35 false refusals, 4 of 15 correct refusals;
+  the next step, 0.70, already has 6 of 35 false refusals.
+- End to end at 0.65 the LLM adds most refusals: 14 of 15 unanswerable refused overall, at a cost of 6 of 35 false
+  refusals (5 of them from `NO_ANSWER`, not the threshold), so raising the threshold would mainly add false refusals.
+- The value was set before the evaluation (D-014) and is confirmed, not tuned, by the curve; it carries no extra
+  overfitting to the dev set.
+
+**Consequences**
+- The holdout run uses exactly this configuration; any later change needs a new dev experiment first.
+- The threshold is a weak filter (4 of 15 at retrieval level); refusal quality depends mostly on the generator.
+
+---
+
+## D-025 — MCP server: deferred to next steps
+
+- **Date:** 2026-10-31
+- **Status:** Deferred
+
+**Decision**
+The planned MCP server (exposing `answer()` as a tool) is not built in this project phase. It is listed as a next step.
+
+**Alternatives**
+- Build it now on top of the stateless `answer()` API (D-008).
+
+**Rationale**
+- Owner's decision: the phase ends with the evaluated pipeline (E-002); the evaluation result, not another interface,
+  is the deliverable.
+- The preparation is done: the core is stateless and returns a structured `Result` with `refused`, `sources` and
+  `error` (D-008 to D-010), which is what an MCP tool would return.
+
+**Consequences**
+- The open MCP-specific points stay open: rendering policy for links in MCP clients (D-018) and per-client history.
+- Review findings that mentioned MCP as a blocker (H7, H8) are already fixed in the core.
+
+---
+
+## D-026 — Docker: deferred to next steps
+
+- **Date:** 2026-10-31
+- **Status:** Deferred
+
+**Decision**
+No Dockerfile or compose setup in this project phase. Listed as a next step.
+
+**Alternatives**
+- Containerize the app with Ollama as a separate service now.
+
+**Rationale**
+- Owner's decision: containerization is already demonstrated in the owner's ticket-pipeline project; repeating it
+  here adds little compared with the evaluation work.
+- The code is ready for it: all settings are environment variables (D-004), the Ollama host is configurable,
+  and the remaining Docker-related items are known.
+
+**Consequences**
+- Still open for a Docker phase: a transitive lock file for the image's Python version (D-006) and an atomic
+  `--reset` / store location on a volume (review M3, D-020).

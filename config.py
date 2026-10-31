@@ -18,6 +18,10 @@ def _env_float(name: str, default: float) -> float:
     return float(os.getenv(name, default))
 
 
+def _env_bool(name: str, default: bool) -> bool:
+    return os.getenv(name, str(default)).strip().lower() in ("1", "true", "yes", "on")
+
+
 # Paths
 DOCUMENTS_DIR = Path(_env_str("RAG_DOCUMENTS_DIR", str(_ROOT / "documents")))
 VECTOR_STORE_DIR = Path(_env_str("RAG_VECTOR_STORE_DIR", str(_ROOT / "vector_store")))
@@ -27,6 +31,9 @@ COLLECTION_NAME = _env_str("RAG_COLLECTION_NAME", "rag_documents")
 OLLAMA_BASE_URL = os.getenv("RAG_OLLAMA_BASE_URL") or None
 LLM_MODEL = _env_str("RAG_LLM_MODEL", "qwen2.5:3b")
 EMBED_MODEL = _env_str("RAG_EMBED_MODEL", "nomic-embed-text")
+# nomic-embed-text task prefixes ("search_document: " / "search_query: "). Changing it requires a re-ingest
+# into a store built with the same setting (checked at startup). See EXPERIMENTS.md E-001.
+EMBED_PREFIXES = _env_bool("RAG_EMBED_PREFIXES", False)
 LLM_TEMPERATURE = _env_float("RAG_LLM_TEMPERATURE", 0.1)
 # Context window requested from Ollama (its default is 4096 and it silently truncates the prompt start).
 NUM_CTX = _env_int("RAG_NUM_CTX", 8192)
