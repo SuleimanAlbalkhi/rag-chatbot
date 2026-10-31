@@ -52,7 +52,7 @@ tasks, in accordance with Union or Member State law.
 6. The data protection officer may fulfil other tasks and duties. The controller or processor shall ensure that any such 
 tasks and duties do not result in a conflict of interests. 
 Article 39 
-Tasks of the data protection officer",,
+Tasks of the data protection officer",1,
 D-003,"If an organisation suffers a data leak, how long does it have to tell the data protection regulator?","Without undue delay and, where feasible, within 72 hours of becoming aware of the breach, unless the breach is unlikely to result in a risk to people's rights and freedoms. Later notifications must explain the delay.","The controller should notify the personal data breach to the supervisory authority without undue delay and, where feasible, not later than 72 hours after having become aware of it.","[1] aware that a personal data breach has occurred, the controller should notify the personal data breach to the 
 supervisory authority without undue delay and, where feasible, not later than 72 hours after having become 
 aware of it, unless the controller is able to demonstrate, in accordance with the accountability principle, that the 
@@ -108,7 +108,7 @@ provided in phases without undue further delay.
 [10] (e)  upon request, provide information to any data subject concerning the exercise of their rights under this Regulation 
 and, if appropriate, cooperate with the supervisory authorities in other Member States to that end; 
 (f)  handle complaints lodged by a data subject, or by a body, organisation or association in accordance with Article 80, 
-and investigate, to the extent appropriate, the subject matter of the complaint and inform the complainant of the",,
+and investigate, to the extent appropriate, the subject matter of the complaint and inform the complainant of the",0,
 D-008,When is an organisation obliged to appoint a data protection officer?,"When processing is done by a public authority or body (except courts in their judicial capacity), when core activities require regular and systematic monitoring of people on a large scale, or when core activities involve large-scale processing of special categories of data or criminal-offence data.","The designation of a data protection officer is required in cases where:
 
 1. The processing is carried out by a public authority or body, except for courts acting in their judicial capacity.
@@ -179,7 +179,7 @@ Article 37
 Designation of the data protection officer 
 1. The controller and the processor shall designate a data protection officer in any case where: 
 (a)  the processing is carried out by a public authority or body, except for courts acting in their judicial capacity; 
-(b)  the core activities of the controller or the processor consist of processing operations which, by virtue of their",,
+(b)  the core activities of the controller or the processor consist of processing operations which, by virtue of their",1,
 D-009,Does a company that watches a busy public square with cameras on a big scale have to do an impact assessment first?,Yes. A data protection impact assessment is required in particular for systematic monitoring of a publicly accessible area on a large scale.,"Yes, a company that watches a busy public square with cameras on a big scale has to do an impact assessment first. This is indicated in the passages where it states that impact assessment is required for monitoring publicly accessible areas on a large scale, especially when using optic-electronic devices or for any other operations where the competent supervisory authority considers that the processing is likely to result in a high risk to the rights and freedoms of data subjects.","[1] impact assessment is equally required for monitoring publicly accessible areas on a large scale, especially when 
 using optic-electronic devices or for any other operations where the competent supervisory authority considers 
 that the processing is likely to result in a high risk to the rights and freedoms of data subjects, in particular 
@@ -199,7 +199,7 @@ personal data and demonstrating compliance with this Regulation.
 [4] (c)  a systematic monitoring of a publicly accessible area on a large scale. 
 4. The supervisory authority shall establish and make public a list of the kind of processing operations which are 
 subject to the requirement for a data protection impact assessment pursuant to paragraph 1. The supervisory authority 
-shall communicate those lists to the Board referred to in Article 68.",,
+shall communicate those lists to the Board referred to in Article 68.",1,
 D-012,Which authorities have a seat on the EU-level board (EDPB) that coordinates the national data protection regulators?,"The head of one supervisory authority of each Member State and the European Data Protection Supervisor, or their representatives.","The Board is composed of the head of one supervisory authority of each Member State and of the European Data Protection Supervisor, or their respective representatives.","[1] Such bodies could comprise data protection authorities, cybersecurity, eID and standardisation bodies, as well as 
 bodies and expert groups under Regulations (EU) 2022/868, (EU) 2023/2854 and (EU) 2024/1689 and Regulation 
 (EU) 2019/881 of the European Parliament and of the Council (21). The EHDS Board should operate independently, 
@@ -257,7 +257,7 @@ appropriate safeguards for the fundamental rights and the interests of the data 
 [10] 3. The representative shall be established in one of the Member States where the data subjects, whose personal data 
 are processed in relation to the offering of goods or services to them, or whose behaviour is monitored, are. 
 4. The representative shall be mandated by the controller or processor to be addressed in addition to or instead of 
-the controller or the processor by, in particular, supervisory authorities and data subjects, on all issues related to",,
+the controller or the processor by, in particular, supervisory authorities and data subjects, on all issues related to",1,
 D-015,Which types of medical records get priority for electronic exchange under the EHDS?,"Patient summaries, electronic prescriptions and dispensations, medical imaging studies and imaging reports, medical test results such as laboratory results, and discharge reports. They were selected by the eHealth Network as most relevant for most healthcare situations.","The priority categories of personal electronic health data for electronic exchange include patient summaries, electronic prescriptions, electronic dispensations, medical imaging studies and related imaging reports, and medical test results such as laboratory results and related reports.","[1] electronic health record exchange format to additional categories of personal electronic health data referred to in 
 Article 14(1), third subparagraph. Those implementing acts shall be adopted in accordance with the examination procedure 
 referred to in Article 98(2).
@@ -315,7 +315,7 @@ specifications on cybersecurity, technical and semantic interoperability, operat
 [10] European health datasets of a high quality. The use of a European electronic health record exchange format should 
 become more widespread at Union and national level. The European electronic health record exchange format could 
 allow for different profiles for its use at the level of EHR systems and at the level of the national contact points for 
-digital health in MyHealth@EU for cross-border data exchange.",,
+digital health in MyHealth@EU for cross-border data exchange.",0,
 D-020,"If I spot a mistake in my electronic health record, can I get it corrected online, and does that cost anything?","Yes. People should be able to request rectification of incorrect data online, immediately and free of charge, through an electronic health data access service; the request is then handled by the controllers under the GDPR.","Yes, you can request the rectification of your personal electronic health data online through an electronic health data access service. The rectification requests should be treated by the relevant controllers in line with Regulation (EU) 2016/679, if necessary involving health professionals. This correction is immediate and free of charge.","[1] persons should be able to request online the rectification of the incorrect personal electronic health data, 
 immediately and free of charge, through an electronic health data access service. Such rectification requests should 
 then be treated by the relevant controllers in line with Regulation (EU) 2016/679, if necessary involving health 
@@ -369,7 +369,7 @@ Article 22
 [10] (g) ‘registration of electronic health data’ means the recording of health data in an electronic format, through the manual 
 entry of such data, through the collection of such data by a device, or through the conversion of non-electronic health 
 data into an electronic format, to be processed in an EHR system or a wellness application;
-(h) ‘electronic health data access service’ means an online service, such as a portal or an application for mobile devices,",,
+(h) ‘electronic health data access service’ means an online service, such as a portal or an application for mobile devices,",1,
 D-030,"What does pseudonymisation mean in the GDPR, and when must the EHDS provide anonymised rather than pseudonymised data to researchers?","Pseudonymisation: processing so data can no longer be attributed to a specific person without additional information kept separately and protected. Under the EHDS, health data access bodies must provide anonymised data whenever the user's purpose can be achieved with anonymised data.","Pseudonymization means processing personal data in such a way that the individual is not directly or indirectly identified. In the GDPR, pseudonymization can be used for statistical or research purposes.
 
 According to Article 67 of the EHDS document, health data access bodies should provide access to electronic health data in pseudonymised format unless they intend to bring datasets already held by them into an anonymised format as per Article 68(1), point (c). In such cases, anonymized data must be provided. Therefore, EHDS must provide anonymised rather than pseudonymised data when the processing cannot be carried out using anonymised data.","[1] the processing of such anonymous information, including for statistical or research purposes. 
@@ -421,7 +421,7 @@ the use of additional information should be considered to be information on an i
 [10] help controllers and processors to meet their data-protection obligations. The explicit introduction of ‘pseudony­
 misation’ in this Regulation is not intended to preclude any other measures of data protection. 
 (29) In order to create incentives to apply pseudonymisation when processing personal data, measures of pseudonymi­
-sation should, whilst allowing general analysis, be possible within the same controller when that controller has",,
+sation should, whilst allowing general analysis, be possible within the same controller when that controller has",0,
 D-031,"If I have opted out of the EHDS access services, can my data still be used in an emergency, and what GDPR condition applies?","Yes. Member States may allow access where necessary to protect vital interests under GDPR Art. 9(2)(c), even after an opt-out. That GDPR condition covers protecting the vital interests of the person or another person where the person is physically or legally incapable of consenting.","If you have opted out of the EHDS access services, your data cannot be used for secondary use under this Regulation. However, it is possible to access the data generated during the period of the opt-out in emergency situations, provided that the processing does not violate the right to protect vital interests as referred to in Article 9(2) of Regulation (EU) 2016/679.","[1] electronic health data by anyone other than the original controller, without any possibility to override that opt-out in 
 emergency situations. In such a case, Member States should establish the rules and specific safeguards regarding such 
 opt-out mechanisms. Those rules and specific safeguards could also relate to specific categories of personal 
@@ -477,7 +477,7 @@ Prohibited secondary use
 Health data users shall only process electronic health data for secondary use on the basis of and in accordance with the 
 purposes contained in a data permit issued pursuant to Article 68, health data requests approved pursuant to Article 69 or, 
 in situations referred to in Article 67(3), an access approval from the relevant authorised participant in HealthData@EU 
-referred to in Article 75.",,
+referred to in Article 75.",0,
 D-034,"Can patients refuse to have their health data used, both for their own care through the access services and for research reuse?","For primary use, an opt-out exists only if a Member State's law provides it (and it must be reversible). For secondary use, natural persons always have the right to opt out at any time without giving reasons; it is reversible.","Article 54 states that Health Data Users shall only process electronic health data for secondary use on the basis of and in accordance with the purposes contained in a data permit issued pursuant to Article 68, health data requests approved pursuant to Article 69 or, in situations referred to in Article 67(3), an access approval from the relevant authorised participant in HealthData@EU referred to in Article 75. This implies that patients can refuse their health data being used for secondary use as it requires a permit or approval.
 
 However, there is no passage explicitly stating whether patients have the right to refuse both access services and research reuse of their health data. The passages focus more on the processing and usage conditions rather than patient rights regarding refusal. Therefore, based solely on the provided information, we cannot definitively answer if patients can refuse both types of uses.","[1] body shall refuse access to the health data applicant to such data. The health data access body shall inform the health data 
@@ -534,4 +534,4 @@ referred to in Article 75.
 [10] have a wide access to data. When accessing data relating to their patients, health professionals should comply with 
 the applicable law, codes of conduct, deontological guidelines or other provisions governing ethical conduct with 
 respect to sharing or accessing information, particularly in life-threatening or extreme situations. In accordance with 
-Regulation (EU) 2016/679, in order to limit their access to what is relevant in a specific episode of care, healthcare",,
+Regulation (EU) 2016/679, in order to limit their access to what is relevant in a specific episode of care, healthcare",0,

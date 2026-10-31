@@ -47,8 +47,14 @@ correct 14 of 29 (48%), faithful to the retrieved passages 16 of 29 (55%). By ty
 15 of 21 faithful; multi 0 of 8 correct and 1 of 8 faithful. The judge was called with the alias `sonnet`, but the CLI reported the model id
 `claude-opus-5-5` for every verdict; the recorded id is authoritative. Typical failures: missing key facts in
 multi answers (retrieval found only one of the two passages), wrong article numbers (D-029), a date present in a
-passage but not used (D-022). Human labels for `eval/runs/baseline/judge_form.csv` (10 items) are pending, so
-judge reliability (kappa) is not known yet.
+passage but not used (D-022).
+
+**Judge validation** (`eval/judge_agreement.py`, 10 human-labelled items in `eval/runs/baseline/judge_form.csv`):
+`correct` agrees on 9 of 10 (90%), Cohen's kappa 0.80. The one disagreement, D-003, is the judge being more
+lenient: it accepted the core 72-hour rule although the answer left out the exception (no notification if the
+breach is unlikely to result in a risk); the human label is incorrect. So `correct` may be slightly optimistic for
+answers that give the rule but omit its conditions. **`faithful` is judge-only**: it was intentionally not
+human-labelled, so its numbers are unvalidated.
 
 **Observations**: retrieval is the bottleneck (7 of 10 multi items miss one page entirely in the top 10);
 the threshold alone hardly separates answerable from unanswerable questions.

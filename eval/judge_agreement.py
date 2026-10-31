@@ -3,7 +3,8 @@
 Usage: python eval/judge_agreement.py --run baseline
 
 Reads eval/runs/<run>/judge_form.csv (human_correct / human_faithful filled with 1 or 0) and judge.jsonl,
-prints and writes judge_agreement.json with raw agreement and Cohen's kappa per verdict.
+prints and writes judge_agreement.json with raw agreement and Cohen's kappa per verdict. A verdict whose
+human column is empty for every item is reported as "not validated"; a partly filled column is an error.
 """
 
 import argparse
@@ -27,7 +28,23 @@ def parse_label(value: str, item_id: str, column: str) -> bool:
         return True
     if v in ("0", "false", "no", "n"):
         return False
-    sys.exit(f"{item_id}: '{column}' must be 1 or 0, got {value!r}")
+    raise ValueError(f"{item_id}: '{column}' must be 1 or 0, got {value!r}")
+
+
+def compare_verdict(rows: list[dict], judge: dict[str, dict], verdict: str, column: str) -> dict | None:
+    """Agreement and kappa for one verdict, or None if no item has a human label in `column`."""
+    if all(not (r.get(column) or "").strip() for r in rows):
+        return None
+    human = [parse_label(r.get(column) or "", r["id"], column) for r in rows]
+    model = [bool(judge[r["id"]][verdict]) for r in rows]
+    return {
+        "n": len(rows),
+        "agreement": sum(h == m for h, m in zip(human, model, strict=True)),
+        "kappa": cohens_kappa(human, model),
+        "disagreements": [
+            {"id": r["id"], "human": h, "judge": m} for r, h, m in zip(rows, human, model, strict=True) if h != m
+        ],
+    }
 
 
 def main() -> int:
@@ -45,16 +62,19 @@ def main() -> int:
 
     result = {"n": len(rows)}
     for verdict, column in LABELS.items():
-        human = [parse_label(r[column], r["id"], column) for r in rows]
-        model = [bool(judge[r["id"]][verdict]) for r in rows]
-        agree = sum(h == m for h, m in zip(human, model, strict=True))
-        kappa = cohens_kappa(human, model)
-        result[verdict] = {"agreement": agree, "kappa": kappa}
+        try:
+            stats = compare_verdict(rows, judge, verdict, column)
+        except ValueError as e:
+            sys.exit(str(e))
+        result[verdict] = stats if stats is not None else "not validated"
+        if stats is None:
+            print(f"{verdict}: not validated (no human labels)")
+            continue
+        kappa = stats["kappa"]
         kappa_text = f"{kappa:.2f}" if kappa is not None else "undefined (all labels identical)"
-        print(f"{verdict}: agreement {fraction(agree, len(rows))}, Cohen's kappa {kappa_text}")
-        for r, h, m in zip(rows, human, model, strict=True):
-            if h != m:
-                print(f"  disagree {r['id']}: human={int(h)} judge={int(m)} ({judge[r['id']]['reason']})")
+        print(f"{verdict}: agreement {fraction(stats['agreement'], stats['n'])}, Cohen's kappa {kappa_text}")
+        for d in stats["disagreements"]:
+            print(f"  disagree {d['id']}: human={int(d['human'])} judge={int(d['judge'])} ({judge[d['id']]['reason']})")
 
     (run_dir / "judge_agreement.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
     return 0
