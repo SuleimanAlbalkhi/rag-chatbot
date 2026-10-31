@@ -756,3 +756,49 @@ qwen2.5:3b, nomic-embed-text without prefixes, top-k 10, chunks 500/100, **cosin
 **Consequences**
 - The holdout run uses exactly this configuration; any later change needs a new dev experiment first.
 - The threshold is a weak filter (4 of 15 at retrieval level); refusal quality depends mostly on the generator.
+
+---
+
+## D-025 — MCP server: deferred to next steps
+
+- **Date:** 2026-10-31
+- **Status:** Deferred
+
+**Decision**
+The planned MCP server (exposing `answer()` as a tool) is not built in this project phase. It is listed as a next step.
+
+**Alternatives**
+- Build it now on top of the stateless `answer()` API (D-008).
+
+**Rationale**
+- Owner's decision: the phase ends with the evaluated pipeline (E-002); the evaluation result, not another interface,
+  is the deliverable.
+- The preparation is done: the core is stateless and returns a structured `Result` with `refused`, `sources` and
+  `error` (D-008 to D-010), which is what an MCP tool would return.
+
+**Consequences**
+- The open MCP-specific points stay open: rendering policy for links in MCP clients (D-018) and per-client history.
+- Review findings that mentioned MCP as a blocker (H7, H8) are already fixed in the core.
+
+---
+
+## D-026 — Docker: deferred to next steps
+
+- **Date:** 2026-10-31
+- **Status:** Deferred
+
+**Decision**
+No Dockerfile or compose setup in this project phase. Listed as a next step.
+
+**Alternatives**
+- Containerize the app with Ollama as a separate service now.
+
+**Rationale**
+- Owner's decision: containerization is already demonstrated in the owner's ticket-pipeline project; repeating it
+  here adds little compared with the evaluation work.
+- The code is ready for it: all settings are environment variables (D-004), the Ollama host is configurable,
+  and the remaining Docker-related items are known.
+
+**Consequences**
+- Still open for a Docker phase: a transitive lock file for the image's Python version (D-006) and an atomic
+  `--reset` / store location on a volume (review M3, D-020).
