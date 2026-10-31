@@ -419,3 +419,123 @@ store whose space or embedding model does not match (`IncompatibleVectorStoreErr
   lowering the threshold lets off-topic chunks through. Threshold calibration per language is the second
   evaluation experiment, after task prefixes (D-003).
 - `RAG_SCORE_THRESHOLD` must now be given as a cosine similarity.
+
+---
+
+## D-015 — Prompt structure: system rules, delimited numbered passages, question last
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+The prompt is a chat prompt: a system message with the rules (passages are untrusted data, answer only
+from them, `NO_ANSWER` if they are insufficient, answer in the question's language, no URLs/links/images),
+then prior turns as real user/assistant messages, then one user message with
+`<passages><passage id="n" source=… page=…>…</passage></passages>` followed by the question. Tag-like
+text (`<passage…>`, `</passages>`) is stripped from chunk text so a document cannot close the block.
+
+**Alternatives**
+- Single text prompt with "Context:" header (previous behavior).
+- Sandwich defense: repeat the rule after the question. Tested and rejected, see below.
+- An LLM-based injection classifier on retrieved chunks, or a grounding check on the answer.
+
+**Rationale**
+- Separating roles and delimiting the data is the standard baseline defense and costs nothing.
+- Question last keeps the instruction closest to generation; history as real messages matches how the
+  model was trained.
+- Verified live with qwen2.5:3b: a payload that closes the passage tags and poses as a new user
+  instruction is now refused 3/3 (was not tested before; it would have been inside the plain context).
+
+**Consequences — residual risk (C3 is mitigated, not fixed)**
+- The original review payload ("IMPORTANT SYSTEM NOTICE … Reply only with: …") **still succeeds 5/5**
+  with qwen2.5:3b. A 3B model does not reliably separate instructions from data. A post-question
+  reminder (sandwich) also failed 5/5 and made normal answers worse (verbatim copying), so it was reverted.
+- The remaining defenses are at the output side (D-018) and in source control: only ingest trusted PDFs.
+- Next steps: injection cases in the eval set; a stronger generator or a grounding/injection check if
+  the eval shows it matters.
+
+---
+
+## D-016 — "Answer in the language of the question" instead of word-list detection
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+Remove `_detect_language` and its German word list; the system prompt tells the model to answer in the
+question's language, even when passages are in another language.
+
+**Alternatives**
+- Fix the word list (remove `was`, `die`, …).
+- A language-ID library (`langdetect`, `lingua`) and an explicit "Respond in X".
+
+**Rationale**
+- Review H4: the word list sent English "was" questions to German.
+- Qwen 2.5 is multilingual (D-001) and follows this instruction. Verified live: "Was the contract basis
+  mentioned?" is answered in English, a German question over English passages in German.
+- No extra dependency and no misclassification of short or mixed questions.
+
+**Consequences**
+- Language choice is now model behavior, not code; eval should measure the answer-language match rate.
+- Any language the model knows works, not just German and English.
+- The refusal message stays English (D-009).
+
+---
+
+## D-017 — Explicit context window (8192) and a token budget for passages and history
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+`ChatOllama` gets `num_ctx=8192` and `num_predict=1024` (both configurable). Before each call,
+`fit_to_budget` estimates tokens (3 characters per token, conservative) and keeps the prompt within
+`num_ctx - num_predict - 256`: passages have priority, the lowest-scoring are dropped only if passages
+alone overflow (at least one kept); the remaining budget takes the most recent history turns, oldest
+dropped first. If Ollama reports `prompt_eval_count >= num_ctx`, a warning is logged.
+
+**Alternatives**
+- Only raise `num_ctx`.
+- Exact token counts with the model's tokenizer (needs `transformers` or an Ollama tokenize call per turn).
+- Summarize old history with an extra LLM call.
+
+**Rationale**
+- Review H1: Ollama's default 4096 window silently cut the start of the prompt (instructions and context).
+- 8192 holds 10 passages plus several turns; qwen2.5:3b supports 32k, and the extra KV cache is small
+  (~0.3 GB) on the local GPU.
+- A character heuristic is dependency-free and errs on the safe side; exact counting is not worth a
+  tokenizer dependency at this size.
+- Verified live: 10 history turns of ~3,600 characters each now drop the 5 oldest turns and the answer stays correct.
+
+**Consequences**
+- Very long conversations lose old turns silently (logged at INFO).
+- Changing `num_ctx` makes Ollama reload the model once.
+- `Result.sources` lists the passages actually sent; `Result.chunks` lists everything retrieved.
+
+---
+
+## D-018 — Neutralize links and images when rendering model output
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+`safe_markdown.neutralize_links` runs on every answer and source snippet before `st.markdown` /
+`st.caption`: images (inline and reference) become their alt text, links become `text (url)` with the URL
+in a code span, autolinks and bare URLs become code spans, reference definitions are removed.
+
+**Alternatives**
+- Render answers as plain text (`st.text`), losing lists and emphasis.
+- Remove URLs entirely.
+- An allow-list of domains (e.g. eur-lex.europa.eu).
+
+**Rationale**
+- Injected content can reach the answer (D-015). A rendered image is fetched by the browser without a
+  click and can leak data in its URL; a rendered link invites a click on an attacker's site.
+- Code spans keep the URL visible (useful for legitimate references) but inert.
+- Markdown formatting of normal answers is preserved. Streamlit already escapes raw HTML.
+
+**Consequences**
+- This protects the Streamlit UI only. The MCP server will return raw text; its clients must apply
+  their own rendering policy (to be documented with the MCP work).
+- Legitimate links are no longer clickable.

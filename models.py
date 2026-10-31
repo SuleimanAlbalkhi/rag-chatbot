@@ -38,6 +38,8 @@ def get_llm() -> ChatOllama:
         model=config.LLM_MODEL,
         base_url=config.OLLAMA_BASE_URL,
         temperature=config.LLM_TEMPERATURE,
+        num_ctx=config.NUM_CTX,
+        num_predict=config.NUM_PREDICT,
     )
 
 

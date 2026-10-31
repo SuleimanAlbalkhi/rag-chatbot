@@ -28,6 +28,10 @@ OLLAMA_BASE_URL = os.getenv("RAG_OLLAMA_BASE_URL") or None
 LLM_MODEL = _env_str("RAG_LLM_MODEL", "qwen2.5:3b")
 EMBED_MODEL = _env_str("RAG_EMBED_MODEL", "nomic-embed-text")
 LLM_TEMPERATURE = _env_float("RAG_LLM_TEMPERATURE", 0.1)
+# Context window requested from Ollama (its default is 4096 and it silently truncates the prompt start).
+NUM_CTX = _env_int("RAG_NUM_CTX", 8192)
+# Upper bound for answer length; reserved out of NUM_CTX when budgeting the prompt.
+NUM_PREDICT = _env_int("RAG_NUM_PREDICT", 1024)
 
 # Ingestion (sizes are in characters, not tokens)
 CHUNK_SIZE = _env_int("RAG_CHUNK_SIZE", 500)

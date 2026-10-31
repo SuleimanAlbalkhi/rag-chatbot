@@ -1,6 +1,7 @@
 import streamlit as st
 from rag_pipeline import RAGPipeline, VectorStoreError
 from models import ModelUnavailableError
+from safe_markdown import neutralize_links
 
 ERROR_MESSAGE = "Sorry, something went wrong while answering. Please try again."
 
@@ -56,7 +57,7 @@ def render_sources(sources):
     with st.expander("📚 Show sources"):
         for i, src in enumerate(sources, 1):
             st.markdown(f"**Source {i}** – `{src.file}`, {page_ref(src)} · relevance {src.score:.2f}")
-            st.caption(src.text)
+            st.caption(neutralize_links(src.text))
             st.divider()
 
 
@@ -75,7 +76,7 @@ for message in st.session_state.messages:
         if message["role"] == "user":
             st.text(message["content"])
         else:
-            st.markdown(ERROR_MESSAGE if message.get("error") else message["content"])
+            st.markdown(ERROR_MESSAGE if message.get("error") else neutralize_links(message["content"]))
             render_sources(message.get("sources"))
 
 user_input = st.chat_input("Ask a question about your documents...")
@@ -88,7 +89,7 @@ if user_input:
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             result = pipeline.answer(user_input, history)
-        st.markdown(ERROR_MESSAGE if result.error else result.answer)
+        st.markdown(ERROR_MESSAGE if result.error else neutralize_links(result.answer))
         render_sources(result.sources)
 
     st.session_state.messages.append({
