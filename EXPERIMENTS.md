@@ -97,3 +97,54 @@ Retrieval-level threshold curve with prefixes (for reference): correct refusals 
   (answerable 0.748 → 0.747, unanswerable 0.690 → 0.689), so prefixes neither sharpen nor shift the score scale.
 - **Caveat:** with 35 answerable items, a 2-question difference is within noise; the evidence is "no improvement",
   not "prefixes are harmful". The result may differ with other chunk sizes or after query rewriting.
+
+---
+
+## E-002 — FINAL: holdout run (`holdout`)
+
+- **Date:** 2026-10-31
+- **Status:** Final result. The configuration was frozen before this run (D-024) and is **not tuned further** on
+  these numbers; the holdout set has now been used and cannot serve as an unseen test set again.
+- **Setup:** exactly E-000 / D-024 (qwen2.5:3b at temperature 0, nomic-embed-text without prefixes, cosine
+  threshold 0.65, top-k 10, chunks 500/100, store `vector_store/`).
+- **Run:** `python eval/run_eval.py --testset eval/holdout/holdout.jsonl --run-name holdout --final` (full mode),
+  then `python eval/judge.py --run holdout`. Clean tree on commit `542137b5`; no code changes before or after.
+- **Test set:** 25 items (18 answerable: 13 single, 5 multi; 7 unanswerable), sha256 `e4274ed12e9c…`.
+
+| | Dev `baseline` (50) | **Holdout `holdout` (25)** |
+|---|---|---|
+| Recall@1 (answerable) | 10 of 35 (29%) | 3 of 18 (17%) |
+| Recall@3 | 15 of 35 (43%) | 5 of 18 (28%) |
+| Recall@5 | 19 of 35 (54%) | 8 of 18 (44%) |
+| Recall@10 | 22 of 35 (63%) | 11 of 18 (61%) |
+| MRR | 0.482 | 0.341 |
+| Single / multi Recall@10 | 21 of 25 (84%) / 1 of 10 (10%) | 9 of 13 (69%) / 2 of 5 (40%) |
+| Threshold only (0.65): correct / false refusals | 4 of 15 (27%) / 1 of 35 (3%) | 1 of 7 (14%) / 2 of 18 (11%) |
+| **End to end: correct refusals (unanswerable)** | 14 of 15 (93%) | **6 of 7 (86%)** |
+| **End to end: false refusals (answerable)** | 6 of 35 (17%) | **7 of 18 (39%)** |
+| Answered (answerable) | 29 of 35 (83%) | 11 of 18 (61%) |
+| Errors | 0 of 50 | 0 of 25 |
+| Latency median / p95 | 3.8 s / 8.8 s | 2.9 s / 8.2 s |
+| **Judge: correct** (validated, κ 0.80 on dev) | 14 of 29 (48%) | **5 of 11 (45%)** |
+| Judge: faithful (judge-only, unvalidated) | 16 of 29 (55%) | 7 of 11 (64%) |
+| Judge correct: single / multi | 14 of 21 / 0 of 8 | 3 of 6 / 2 of 5 |
+
+Judge model: alias `sonnet`, CLI-reported id `claude-opus-5-5` (as on dev).
+
+**Findings**
+- **False refusals are the main loss:** 7 of 18 answerable holdout questions were refused (dev: 6 of 35). Two by the
+  threshold (top scores 0.633 and 0.637, just below 0.65), five by the generator's `NO_ANSWER` although retrieval
+  passed the threshold (top scores 0.653–0.723).
+- **Ranking is weaker, recall at 10 is not:** MRR 0.48 → 0.34 and Recall@5 54% → 44%, while Recall@10 stays at
+  61% vs. 63%: the right page is usually retrieved, but ranked lower.
+- **Unanswerable questions are still refused reliably:** 6 of 7. The one miss (H-020) had a top score of 0.821,
+  out of reach for any reasonable threshold; nearly all refusals come from the generator, not the threshold
+  (threshold alone: 1 of 7).
+- **Correctness of answered questions is stable:** 45% vs. 48% on dev.
+- **Precision:** with 18 answerable and 7 unanswerable items, one item is 6 or 14 percentage points; dev/holdout
+  differences of one or two items are noise. The false-refusal rate is the one clearly worse number.
+
+**Conclusion:** the local 3B pipeline refuses unanswerable questions well (86–93%), but answers only about 60–80% of
+answerable ones and gets roughly half of those fully right. The limits are retrieval ranking (multi-passage
+questions especially) and an over-cautious generator, not the threshold. Any improvement now needs new dev
+experiments and a new, unseen test set for confirmation.

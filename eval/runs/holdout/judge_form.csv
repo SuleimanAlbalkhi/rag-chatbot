@@ -1,0 +1,545 @@
+﻿id,question,reference_answer,candidate_answer,retrieved_passages,human_correct (1/0),human_faithful (1/0)
+H-001,"Can I find out which doctors or clinics have looked at my electronic health data, and for how long is that record kept?","Yes. Natural persons have the right to obtain information, including through automatic notifications, on any access to their personal electronic health data through the health professional access service. It is provided free of charge and without delay through the electronic health data access services and must remain available for at least three years from each access, including who accessed the data.","The information on who accessed your personal electronic health data and the duration of such access are available. However, the passage does not specify exactly how long this information should be retained, only stating it must be available ""for at least three years from each date of access to the data.""","[1] health data access services and shall be available for at least three years from each date of access to the data. That 
+information shall include at least the following:
+(a) information on the healthcare provider or other individuals who accessed the personal electronic health data;
+(b) the date and time of access;
+(c) which personal electronic health data were accessed.
+3. Member States may provide for restrictions to the right referred to in paragraph 1 in exceptional circumstances, where
+
+[2] data, such as diagnostics, tests and medical examinations, as well as data observed and recorded by automated 
+means.
+(7) In health systems, personal electronic health data are usually gathered in electronic health records, which typically 
+contain a natural person’s medical history, diagnoses and treatment, medications, allergies and vaccinations, as well 
+as radiology images, laboratory results and other medical data, spread between different actors in the health system,
+
+[3] electronic health data in an EHR system as relevant. Those implementing acts shall be adopted in accordance with the 
+examination procedure referred to in Article 98(2).
+When personal electronic health data are registered or updated, the electronic health records shall identify the health 
+professional and healthcare provider that carried out such registration or update, and the time at which such registration or
+
+[4] to access their health data in an electronic format that can be recognised and accepted across the Union. Such 
+personal electronic health data could include personal data related to the physical or mental health of a natural 
+person, including related to the provision of healthcare services, and which reveal information about that natural 
+person’s health status, personal data relating to the inherited or acquired genetic characteristics of a natural person
+
+[5] personal electronic health data referred to in Article 14 in an electronic format in an EHR system.
+2. When processing data in an electronic format, healthcare providers shall ensure that the personal electronic health 
+data of the natural persons under their treatment are updated with information related to the healthcare.
+3. Where personal electronic health data are registered in a Member State of treatment that differs from the Member
+
+[6] (ERN) registries). The categories of electronic health data that can be processed for secondary use should also include 
+automatically generated data from medical devices and person-generated data, such as data from wellness 
+applications. Data on clinical trials and clinical investigations should also be included in the categories of electronic 
+health data for secondary use when the clinical trial or clinical investigation has ended, without affecting any
+
+[7] obtained by the health data users on the basis of a data permit, a health data request or an access approval by an authorised 
+participant in HealthData@EU relate.
+4. Health data users shall make public the results or output of secondary use, including information relevant for the 
+provision of healthcare, within 18 months of the completion of the processing of the electronic health data in the secure
+
+[8] access data of natural persons under their treatment;
+(j) ‘electronic health record’ or ‘EHR’ means a collection of electronic health data related to a natural person and collected 
+in the health system, processed for the purpose of the provision of healthcare;
+(k) ‘electronic health record system’ or ‘EHR system’ means any system whereby the software, or a combination of the
+
+[9] persons’ access to and control over their personal electronic health data in the context of healthcare, as well as to 
+better achieve other purposes involving the use of electronic health data in the healthcare and care sectors that 
+would benefit society, such as research, innovation, policymaking, health threats preparedness and response, 
+including preventing and addressing future pandemics, patient safety, personalised medicine, official statistics or
+
+[10] categories of electronic health data is needed. Categories of electronic health data such as patient summaries, 
+electronic prescriptions and dispensations, medical imaging studies and related imaging reports, medical test results 
+such as laboratory results and related reports, and discharge reports have been selected by the eHealth Network as 
+most relevant for the majority of healthcare situations and should be considered as priority categories for Member",,
+H-002,"Can someone let a relative or friend view their electronic health records on their behalf under the EHDS, and for how long?","Yes. Member States must set up proxy services within the electronic health data access services that let a person authorise other people of their choice to access all or part of their personal electronic health data on their behalf, for a limited or unlimited period and, if needed, only for a specific purpose, and to manage those authorisations.","Member States shall establish rules regarding the authorisations referred to in point (a) of the first subparagraph and actions of guardians and other legal representatives. This allows natural persons to provide an authorization to other natural persons of their choice, such as relatives or close friends, enabling them to access or control the access to personal electronic health data. However, the duration for which this can be done is not specified in the provided passages.","[1] health data access services and shall be available for at least three years from each date of access to the data. That 
+information shall include at least the following:
+(a) information on the healthcare provider or other individuals who accessed the personal electronic health data;
+(b) the date and time of access;
+(c) which personal electronic health data were accessed.
+3. Member States may provide for restrictions to the right referred to in paragraph 1 in exceptional circumstances, where
+
+[2] the display of some personal electronic health data of dependent persons to their guardians could be contrary to the 
+interests or the will of their dependents, including minors, Member States should be able to provide in national law 
+for limitations and safeguards as well as for mechanisms for their technical implementation. Personal electronic 
+health data access services, such as patient portals or patient-facing applications for mobile devices, should make use
+
+[3] thereof, on their behalf for a limited or unlimited period and, if needed, for a specific purpose only, and to manage those 
+authorisations; and
+(b) legal representatives of natural persons to access personal electronic health data of those natural persons whose affairs 
+they administer, in accordance with national law.
+Member States shall establish rules regarding the authorisations referred to in point (a) of the first subparagraph and actions 
+of guardians and other legal representatives.
+
+[4] obtained by the health data users on the basis of a data permit, a health data request or an access approval by an authorised 
+participant in HealthData@EU relate.
+4. Health data users shall make public the results or output of secondary use, including information relevant for the 
+provision of healthcare, within 18 months of the completion of the processing of the electronic health data in the secure
+
+[5] conditions and safeguards for the processing of electronic health data in electronic health data access services, such 
+as electronic identification of natural persons accessing such services.
+(21) Natural persons should be able to provide an authorisation to other natural persons of their choice, such as their 
+relatives or other close natural persons, enabling such persons of their choice to access or control the access to the
+
+[6] against an individual controller, which has up to one month to reply to a request. The right to access personal 
+electronic health data under this Regulation should be limited to the categories of data falling within its scope, be 
+exercised via an electronic health data access service and entail an immediate answer. The rights under Regulation 
+(EU) 2016/679 should continue to apply, allowing natural persons to benefit from their rights under both legal
+
+[7] to access their health data in an electronic format that can be recognised and accepted across the Union. Such 
+personal electronic health data could include personal data related to the physical or mental health of a natural 
+person, including related to the provision of healthcare services, and which reveal information about that natural 
+person’s health status, personal data relating to the inherited or acquired genetic characteristics of a natural person
+
+[8] this Regulation. This should not affect the obligation to make personal electronic health data, registered after the 
+date of application of this Regulation, available in an electronic format.
+(12) In order to complement the information available to them, natural persons should be able to add electronic health 
+data to their EHRs or to store additional information in their separate personal health record which could be
+
+[9] CHAPTER II
+PRIMARY USE
+SECTION 1
+Rights of natural persons in relation to the primary use of their personal electronic health data, and related provisions
+Article 3
+Right of natural persons to access their personal electronic health data
+1. Natural persons shall have the right to access at least personal electronic health data relating to them that belong to 
+the priority categories referred to in Article 14 and are processed for the provision of healthcare through the electronic
+
+[10] condition. It is therefore necessary to provide for a more efficient way for natural persons to access their own 
+personal electronic health data. They should have the right to have free-of-charge and immediate access, while 
+respecting the need for technological practicability, to specific priority categories of personal electronic health data, 
+such as the patient summary, through an electronic health data access service. That right should apply regardless of",,
+H-006,"Can I add my own notes, such as home blood pressure readings, to my electronic health record, and will clinicians see that they came from me?","Yes. Natural persons or their representatives may insert information into their own EHR through the electronic health data access services or linked applications. That information must be clearly distinguishable as inserted by the person or their representative, and they cannot directly alter data entered by health professionals.","Yes, you can add your own notes such as home blood pressure readings to your electronic health record. However, these added data should be clearly distinguishable from the data provided by healthcare professionals. Therefore, clinicians may not automatically recognize them as coming directly from you unless specifically informed about their source.","[1] complement personal electronic health data should not entitle them to change personal electronic health data which 
+have been provided by health professionals.
+(13) Enabling natural persons to more easily and quickly access their personal electronic health data will enable them to 
+notice possible errors such as incorrect information or incorrectly attributed patient records. In such cases, natural
+
+[2] accessed by health professionals. However, information inserted by natural persons might not be as reliable as 
+electronic health data entered and verified by health professionals and does not have the same clinical or legal value 
+as information provided by health professionals. Therefore, data added by natural persons in their EHR should be 
+clearly distinguishable from data provided by health professionals. That possibility for natural persons to add and
+
+[3] this Regulation. This should not affect the obligation to make personal electronic health data, registered after the 
+date of application of this Regulation, available in an electronic format.
+(12) In order to complement the information available to them, natural persons should be able to add electronic health 
+data to their EHRs or to store additional information in their separate personal health record which could be
+
+[4] to access their health data in an electronic format that can be recognised and accepted across the Union. Such 
+personal electronic health data could include personal data related to the physical or mental health of a natural 
+person, including related to the provision of healthcare services, and which reveal information about that natural 
+person’s health status, personal data relating to the inherited or acquired genetic characteristics of a natural person
+
+[5] electronic health data in an EHR system as relevant. Those implementing acts shall be adopted in accordance with the 
+examination procedure referred to in Article 98(2).
+When personal electronic health data are registered or updated, the electronic health records shall identify the health 
+professional and healthcare provider that carried out such registration or update, and the time at which such registration or
+
+[6] data, such as diagnostics, tests and medical examinations, as well as data observed and recorded by automated 
+means.
+(7) In health systems, personal electronic health data are usually gathered in electronic health records, which typically 
+contain a natural person’s medical history, diagnoses and treatment, medications, allergies and vaccinations, as well 
+as radiology images, laboratory results and other medical data, spread between different actors in the health system,
+
+[7] personal electronic health data referred to in Article 14 in an electronic format in an EHR system.
+2. When processing data in an electronic format, healthcare providers shall ensure that the personal electronic health 
+data of the natural persons under their treatment are updated with information related to the healthcare.
+3. Where personal electronic health data are registered in a Member State of treatment that differs from the Member
+
+[8] persons’ access to and control over their personal electronic health data in the context of healthcare, as well as to 
+better achieve other purposes involving the use of electronic health data in the healthcare and care sectors that 
+would benefit society, such as research, innovation, policymaking, health threats preparedness and response, 
+including preventing and addressing future pandemics, patient safety, personalised medicine, official statistics or
+
+[9] systems. Therefore, health professionals should be provided with appropriate electronic means, such as electronic 
+devices and health professional portals or other health professional access services, to use personal electronic health 
+data for the exercise of their duties. As it is difficult to exhaustively determine in advance which data from the 
+existing data in priority categories are medically relevant in a specific episode of care, health professionals should
+
+[10] condition. It is therefore necessary to provide for a more efficient way for natural persons to access their own 
+personal electronic health data. They should have the right to have free-of-charge and immediate access, while 
+respecting the need for technological practicability, to specific priority categories of personal electronic health data, 
+such as the patient summary, through an electronic health data access service. That right should apply regardless of",,
+H-011,Does the GDPR protect information about people who have died?,"No. The GDPR does not apply to personal data of deceased persons, although Member States may adopt their own rules on processing such data.",The GDPR does not apply to the personal data of deceased persons. Member States may provide for rules regarding the processing of personal data of deceased persons.,"[1] the processing of such anonymous information, including for statistical or research purposes. 
+(27)  This Regulation does not apply to the personal data of deceased persons. Member States may provide for rules 
+regarding the processing of personal data of deceased persons. 
+(28)  The application of pseudonymisation to personal data can reduce the risks to the data subjects concerned and
+
+[2] controller not established in the Union, such as in a Member State's diplomatic mission or consular post. 
+(26)  The principles of data protection should apply to any information concerning an identified or identifiable natural 
+person. Personal data which have undergone pseudonymisation, which could be attributed to a natural person by 
+the use of additional information should be considered to be information on an identifiable natural person. To
+
+[3] measures or decisions regarding any particular natural person. 
+(163)  The confidential information which the Union and national statistical authorities collect for the production of 
+official European and official national statistics should be protected. European statistics should be developed, 
+produced and disseminated in accordance with the statistical principles as set out in Article 338(2) TFEU, while
+
+[4] manner, in all issues which relate to the protection of personal data. 
+4.5.2016 L 119/55 Official Journal of the European Union EN
+
+[5] (158)  Where personal data are processed for archiving purposes, this Regulation should also apply to that processing, 
+bearing in mind that this Regulation should not apply to deceased persons. Public authorities or public or private 
+bodies that hold records of public interest should be services which, pursuant to Union or Member State law, 
+have a legal obligation to acquire, preserve, appraise, arrange, describe, communicate, promote, disseminate and
+
+[6] the Council (1) leaves intact and in no way affects the level of protection of natural persons with regard to the 
+4.5.2016 L 119/28 Official Journal of the European Union EN     
+(1) Directive 2003/98/EC of the European Parliament and of the Council of 17 November 2003 on the re‑use of public sector information 
+(OJ L 345, 31.12.2003, p. 90).
+
+[7] by persons subject to a legal obligation of professional secrecy. Union or Member State law should provide for 
+specific and suitable measures so as to protect the fundamental rights and the personal data of natural persons. 
+Member States should be allowed to maintain or introduce further conditions, including limitations, with regard 
+to the processing of genetic data, biometric data or data concerning health. However, this should not hamper the
+
+[8] HAVE ADOPTED THIS REGULATION: 
+CHAPTER I 
+General provisions 
+Article 1 
+Subject-matter and objectives 
+1. This Regulation lays down rules relating to the protection of natural persons with regard to the processing of 
+personal data and rules relating to the free movement of personal data. 
+2. This Regulation protects fundamental rights and freedoms of natural persons and in particular their right to the 
+protection of personal data.
+
+[9] society. 
+Article 98 
+Review of other Union legal acts on data protection 
+The Commission shall, if appropriate, submit legislative proposals with a view to amending other Union legal acts on 
+the protection of personal data, in order to ensure uniform and consistent protection of natural persons with regard to 
+processing. This shall in particular concern the rules relating to the protection of natural persons with regard to
+
+[10] the protection of the rights, of natural persons.
+7. Member States shall notify without delay the Commission of the provisions of their national law which they adopt 
+pursuant to paragraph 4 and of any subsequent amendment affecting them.
+8. When the purposes of the processing of personal electronic health data by a health data holder do not or no longer 
+require the identification of a data subject by the controller, that health data holder shall not be obliged to maintain, acquire",,
+H-013,How often must the European Commission evaluate the GDPR and report on it?,The Commission had to submit its first evaluation and review report to the European Parliament and the Council by 25 May 2020 and must do so every four years thereafter; the reports are made public.,The European Commission must submit a report on the evaluation and review of this Regulation to the European Parliament and to the Council every four years.,"[1] annually on that progress, taking into account information provided by the Member States. Those reports could 
+include recommendations for remedial measures, as well as an assessment of the progress made.
+(108) In order to assess whether this Regulation reaches its objectives effectively and efficiently, is coherent and still 
+relevant and provides added value at Union level, the Commission should carry out an evaluation of this Regulation.
+
+[2] The Commission should carry out a targeted evaluation of this Regulation within eight years of its entry into force, 
+and an overall evaluation within 10 years of its entry into force. The Commission should submit reports on its main 
+findings following each evaluation to the European Parliament and to the Council, the European Economic and 
+Social Committee and the Committee of the Regions.
+
+[3] take into account all relevant developments in the third country or international organisation. For the purposes 
+of monitoring and of carrying out the periodic reviews, the Commission should take into consideration the views 
+and findings of the European Parliament and of the Council as well as of other relevant bodies and sources. The 
+Commission should evaluate, within a reasonable time, the functioning of the latter decisions and report any
+
+[4] date, shall remain in force until amended, replaced or revoked. 
+Article 97 
+Commission reports 
+1. By 25 May 2020 and every four years thereafter, the Commission shall submit a report on the evaluation and 
+review of this Regulation to the European Parliament and to the Council. The reports shall be made public. 
+2. In the context of the evaluations and reviews referred to in paragraph 1, the Commission shall examine, in 
+particular, the application and functioning of:
+
+[5] measures. That evaluation shall include an assessment of the efficiency and functioning of the systems providing for access 
+to electronic health data for further processing, carried out on the basis of Union or national law referred to in Article 1(7), 
+with regard to their impact on the implementation of this Regulation.
+3. Member States shall provide the Commission with the information necessary for the preparation of the reports
+
+[6] territory or specified sector within a third country, or an international organisation, and monitor the functioning 
+of decisions adopted on the basis of Article 25(6) or Article 26(4) of Directive 95/46/EC. In its adequacy 
+decisions, the Commission should provide for a periodic review mechanism of their functioning. That periodic 
+review should be conducted in consultation with the third country or international organisation in question and
+
+[7] anybody. 
+Article 70 
+Tasks of the Board 
+1. The Board shall ensure the consistent application of this Regulation. To that end, the Board shall, on its own 
+initiative or, where relevant, at the request of the Commission, in particular: 
+(a)  monitor and ensure the correct application of this Regulation in the cases provided for in Articles 64 and 65 
+without prejudice to the tasks of national supervisory authorities; 
+4.5.2016 L 119/76 Official Journal of the European Union EN
+
+[8] information and expertise on establishing and evaluating such Networks (OJ L 200, 29.7.2019, p. 35).
+
+[9] surveillance authority, or where the Commission considers a national measure to be contrary to Union law, the 
+Commission shall without delay enter into consultations with that market surveillance authority and the relevant economic 
+operators and shall evaluate the national measure concerned. On the basis of the results of that evaluation, the Commission 
+shall adopt an implementing decision determining whether the national measure is justified. That implementing decision
+
+[10] authorities. 
+4. In carrying out the evaluations and reviews referred to in paragraphs 1 and 2, the Commission shall take into 
+account the positions and findings of the European Parliament, of the Council, and of other relevant bodies or sources. 
+5. The Commission shall, if necessary, submit appropriate proposals to amend this Regulation, in particular taking 
+into account of developments in information technology and in the light of the state of progress in the information 
+society.",,
+H-014,"How does the EHDS define the personal health data it covers, and how does that build on the GDPR's definition of health data?","The EHDS defines personal electronic health data as data concerning health and genetic data processed in electronic form. 'Data concerning health' comes from the GDPR, where it means personal data related to a person's physical or mental health, including the provision of health care services, which reveal information about their health status.","The EHDS defines 'personal electronic health data' as data concerning health and genetic data, processed in an electronic form. This aligns with the GDPR's definition of 'data concerning health', which includes personal data related to the physical or mental health of a natural person, including the provision of healthcare services that reveal information about their health status. The EHDS also covers non-personal electronic health data, which are electronic health data other than personal electronic health data and include anonymised data no longer relating to an identified or identifiable natural person. This builds on GDPR's broader definition by specifying types of personal data related to health and genetic characteristics that can be processed in an electronic form.","[1] ‘data subject’) and data that have never related to a data subject;
+(c) ‘electronic health data’ means personal or non-personal electronic health data;
+(d) ‘primary use’ means the processing of electronic health data for the provision of healthcare, in order to assess, maintain 
+or restore the state of health of the natural person to whom those data relate, including the prescription, dispensation
+
+[2] natural person, such as facial images or dactyloscopic data;  
+(15) ‘data concerning health’ means personal data related to the physical or mental health of a natural person, including 
+the provision of health care services, which reveal information about his or her health status;  
+(16) ‘main establishment’ means: 
+(a) as regards a controller with establishments in more than one Member State, the place of its central adminis­
+
+[3] Article 2
+Definitions
+1. For the purposes of this Regulation, the following definitions apply:
+(a) the definitions of ‘personal data’, ‘processing’, ‘pseudonymisation’, ‘controller’, ‘processor’, ‘third party’, ‘consent’, ‘genetic 
+data’, ‘data concerning health’ and ‘international organisation’ laid down in Article 4, points (1), (2), (5), (7), (8), (10), 
+(11), (13), (15) and (26), respectively, of Regulation (EU) 2016/679;
+
+[4] 2. In addition, for the purposes of this Regulation the following definitions apply:
+(a) ‘personal electronic health data’ means data concerning health and genetic data, processed in an electronic form;
+(b) ‘non-personal electronic health data’ means electronic health data other than personal electronic health data, including 
+both data that have been anonymised so that they no longer relate to an identified or identifiable natural person (the
+
+[5] persons’ access to and control over their personal electronic health data in the context of healthcare, as well as to 
+better achieve other purposes involving the use of electronic health data in the healthcare and care sectors that 
+would benefit society, such as research, innovation, policymaking, health threats preparedness and response, 
+including preventing and addressing future pandemics, patient safety, personalised medicine, official statistics or
+
+[6] to access their health data in an electronic format that can be recognised and accepted across the Union. Such 
+personal electronic health data could include personal data related to the physical or mental health of a natural 
+person, including related to the provision of healthcare services, and which reveal information about that natural 
+person’s health status, personal data relating to the inherited or acquired genetic characteristics of a natural person
+
+[7] (a) the identity of the health data applicant and a description of that health data applicant’s professional functions and 
+activities;
+(b) a detailed explanation of the intended use of the electronic health data, including the purposes referred to in 
+Article 53(1) for which the health data request is submitted;
+(c) a description of the requested electronic health data, their format and the sources of those data, where possible;
+(d) a description of the statistical content;
+
+[8] access data of natural persons under their treatment;
+(j) ‘electronic health record’ or ‘EHR’ means a collection of electronic health data related to a natural person and collected 
+in the health system, processed for the purpose of the provision of healthcare;
+(k) ‘electronic health record system’ or ‘EHR system’ means any system whereby the software, or a combination of the
+
+[9] personal electronic health data when preparing the data and making them available to the health data users. Health 
+data users should be deemed controllers for the processing of personal electronic health data in pseudonymised form 
+in the secure processing environment pursuant to their data permits. Health data access bodies should be deemed 
+processors on behalf of the health data user for the processing carried out by the health data user pursuant to a data
+
+[10] (g) ‘registration of electronic health data’ means the recording of health data in an electronic format, through the manual 
+entry of such data, through the collection of such data by a device, or through the conversion of non-electronic health 
+data into an electronic format, to be processed in an EHR system or a wellness application;
+(h) ‘electronic health data access service’ means an online service, such as a portal or an application for mobile devices,",,
+H-015,"Could my country hold back a worrying test result from my online record until a doctor has talked me through it, and what GDPR rule allows limiting data subject rights like that?","Yes. Under the EHDS, Member States may, in accordance with GDPR Article 23, restrict the access and download rights, in particular to protect patients on grounds of patient safety and ethics, by delaying access for a limited time until a health professional can properly communicate and explain information that may significantly affect their health. GDPR Article 23 allows Union or Member State law to restrict data subject rights by a legislative measure that respects the essence of fundamental rights and is necessary and proportionate in a democratic society to safeguard listed interests.","Yes, your country could hold back a worrying test result from your online health record until a doctor has explained it to you. This is allowed by Article 8 of the EHDS Regulation, which permits natural persons to restrict access to their personal electronic health data for a limited period if necessary to protect natural persons on the basis of patient safety and ethical considerations.
+
+GDPR Rule: The right to restrict processing under GDPR (Article 21) allows individuals to prevent certain types of processing. However, this is not directly applicable as it pertains more broadly to all personal data rather than specifically to health data in the EHDS context. For health data within the scope of the EHDS Regulation, the specific Article 8 right applies.","[1] data could be provided for by Member States in their national law, in particular as regards medical liability in cases 
+where restrictions have been placed by the natural person concerned.
+(18) In addition, due to the different sensitivities in the Member States on the degree of patients’ control over their health 
+data, Member States should be able to provide for an absolute right to opt out from access to their personal
+
+[2] and to exercise that right easily and at reasonable intervals, in order to be aware of, and verify, the lawfulness of 
+the processing. This includes the right for data subjects to have access to data concerning their health, for 
+example the data in their medical records containing information such as diagnoses, examination results, 
+assessments by treating physicians and any treatment or interventions provided. Every data subject should
+
+[3] parts of datasets, such as elements of the patient summaries. Before setting the restrictions, natural persons should 
+be informed of the risks for patient safety associated with limiting access to health data. Given that the unavailability 
+of the restricted personal electronic health data may impact the provision or quality of health services provided to 
+the natural person, natural persons making use of such access restrictions should assume responsibility for the fact 
+EN OJ L, 5.3.2025
+
+[4] that the healthcare provider cannot take the data into account when providing health services. The restrictions on 
+access to personal electronic health data could have life-threatening consequences and, therefore, access to those data 
+should nevertheless be possible where necessary to protect vital interests in emergency situations. More specific legal 
+provisions on the mechanisms of restrictions placed by natural persons on parts of their personal electronic health
+
+[5] this Regulation.
+4. In the case of treatment in a Member State other than the Member State of affiliation, the rules referred to in 
+paragraph 3 shall be those of the Member State of treatment.
+5. Where access to personal electronic health data has been restricted by a natural person pursuant to Article 8, the 
+healthcare provider or health professional shall not be informed of the restricted content of those data.
+
+[6] When exercising the right referred to in the first paragraph, natural persons shall be made aware that restricting access 
+might impact the provision of healthcare to them.
+The fact that a natural person has restricted access under the first paragraph shall not be visible to healthcare providers.
+Member States shall establish the rules and specific safeguards regarding such restriction mechanisms.
+Article 9
+Right to obtain information on accessing data
+
+[7] for in paragraphs 1 and 2 of this Article, in particular whenever those restrictions are necessary to protect natural persons, 
+on the basis of patient safety and ethical considerations by delaying access to their personal electronic health data for 
+a limited period of time until a health professional is able to properly communicate and explain to the natural persons 
+concerned information that can have a significant impact on their health.
+Article 4
+
+[8] processing of their personal data. The EHDS builds upon those rights and complements some of them as applied to 
+personal electronic health data. Those rights apply regardless of the Member State in which the personal electronic 
+health data are processed, type of healthcare provider, sources of those data or Member State of affiliation of the 
+natural person. The rights and rules related to the primary use of personal electronic health data under this
+
+[9] professional treating the natural person concerned. Natural persons shall have the right to request not to be informed of 
+such findings.
+4. Member States shall inform the public at large about the role and benefits of health data access bodies.
+OJ L, 5.3.2025 EN
+ELI: http://data.europa.eu/eli/reg/2025/327/oj 63/96
+
+[10] against an individual controller, which has up to one month to reply to a request. The right to access personal 
+electronic health data under this Regulation should be limited to the categories of data falling within its scope, be 
+exercised via an electronic health data access service and entail an immediate answer. The rights under Regulation 
+(EU) 2016/679 should continue to apply, allowing natural persons to benefit from their rights under both legal",,
+H-016,"Can a research institute located outside the EU apply for EHDS health data, and what general GDPR principle governs sending personal data to non-EU countries?","Under the EHDS, applications from a third-country applicant are eligible only if that country is an authorised participant with a national contact point for secondary use, or grants EU applicants access on conditions no more restrictive than the EHDS (confirmed by a Commission implementing act). Under the GDPR, any transfer of personal data to a third country or international organisation may take place only if the conditions of Chapter V are met, including for onward transfers, so that the GDPR's level of protection is not undermined.","No information provided about a research institute applying for EHDS health data. The general GDPR principle governing sending personal data to non-EU countries is the necessity and proportionality principle. However, specific conditions apply based on adequacy decisions or other criteria as per Article 45 of Regulation (EU) 2016/679.","[1] Article 88
+Third-country transfer of non-personal electronic data
+1. Non-personal electronic health data made available by health data access bodies to a health data user in a third 
+country under a data permit issued pursuant to Article 68 of this Regulation or a health data request approved pursuant to 
+Article 69 of this Regulation, to authorised participants in a third country or to an international organisation, and based on
+
+[2] Article 89
+International governmental access to non-personal electronic health data
+1. Digital health authorities, health data access bodies, authorised participants in the cross-border infrastructures 
+provided for in Articles 23 and 75 and health data users shall take all reasonable technical, legal and organisational 
+measures, including contractual arrangements, in order to prevent the transfer of non-personal electronic health data held
+
+[3] and processed solely within the Union for the purpose of carrying out the tasks provided for in this Regulation, 
+unless an adequacy decision adopted pursuant to Article 45 of Regulation (EU) 2016/679 applies.
+(94) Access to electronic health data for health data users established in third countries or for international organisations 
+should take place only on the basis of the reciprocity principle. Making electronic health data available to a third
+
+[4] Article 90
+Additional conditions for transfer of personal electronic health data to a third country or an international 
+organisation
+Transfer of personal electronic health data to a third country or an international organisation shall be granted in accordance 
+with Chapter V of Regulation (EU) 2016/679. Member States may maintain or introduce further conditions on international
+
+[5] — visual characteristics and technical specifications of the data quality and utility label,
+— minimum specifications for datasets of high impact for secondary use,
+— decisions on whether a third country allows Union health data applicants to access electronic health data in that 
+third country under conditions that are not more restrictive than those provided for in this Regulation,
+— necessary measures for the establishment and operation of the EHDS Board.
+
+[6] particular, the application and functioning of: 
+(a)  Chapter V on the transfer of personal data to third countries or international organisations with particular regard to 
+decisions adopted pursuant to Article 45(3) of this Regulation and decisions adopted on the basis of Article 25(6) of 
+Directive 95/46/EC; 
+(b)  Chapter VII on cooperation and consistency. 
+3. For the purpose of paragraph 1, the Commission may request information from Member States and supervisory 
+authorities.
+
+[7] a natural person’s electronic health data falling within one of the categories referred to in Article 51 of this Regulation, shall 
+be deemed highly sensitive within the meaning of Article 5(13) of Regulation (EU) 2022/868 where the transfer of such 
+non-personal electronic data to third countries presents a risk of re-identification through means going beyond those 
+reasonably likely to be used, in particular in view of the limited number of natural persons to whom those data relate, the
+
+[8] manner. In order to facilitate the free movement of personal electronic health data across the Union and avoid 
+negative consequences for patients when receiving healthcare in a cross-border context, Union action is needed to 
+improve natural persons’ access to their own personal electronic health data and to empower them to share those 
+data. In this respect, appropriate action at Union and national level should be taken as a means of reducing
+
+[9] a health data applicant established in a third country shall be considered eligible by health data access bodies and the Union 
+health data access service if the third country concerned:
+(a) is an authorised participant on the basis of having a national contact point for secondary use covered by an 
+implementing act referred to in Article 75(5); or
+(b) allows Union health data applicants access to electronic health data in that third country under conditions that are not
+
+[10] applying the data minimisation principle. Therefore, non-personal electronic health data should be made available in 
+all cases where the provision of such data is sufficient. If the health data user needs to use personal electronic health 
+data, it should clearly indicate in its request the justification for the use of that type of data and the health data access 
+body should assess whether that justification is valid. The personal electronic health data should only be made",,
+H-017,"How can a researcher see which health datasets are available through the EHDS, and how is their quality documented?","Health data access bodies publish a publicly available, standardised, machine-readable dataset catalogue with metadata on each dataset's source, scope, main characteristics, nature and access conditions. Datasets may carry a Union data quality and utility label; datasets collected with public Union or national funding must have one.","The national dataset catalogue should be established to facilitate the discoverability of datasets available in the EHDS. It helps health data holders publish their datasets and provides information about datasets placed on the EHDS, including quality and utility labels. The 'data quality and utility label' is a graphic diagram describing the data quality and conditions of use of a dataset. Therefore, researchers can see which health datasets are available through the EHDS and their quality is documented via these labels.","[1] that health data users can be informed of elementary facts about the dataset and assess the possible relevance of 
+those facts to those users. For this reason, each dataset should include, at least, information concerning the source 
+and nature of the data and the conditions for making the data available. The health data holder should, at least every 
+year, check that its dataset description in the national dataset catalogue is accurate and up to date. Therefore, an EU
+
+[2] available through the EHDS, but provide a transparency mechanism between health data holders and health data 
+users. For example, a dataset that does not fulfil any requirement of data quality and utility should be labelled with 
+the class representing the poorest quality and utility, but should still be made available. Expectations set by 
+frameworks created pursuant to Article 10 of Regulation (EU) 2024/1689 and the relevant technical documentation
+
+[3] recommendations for data collection and data exchange, such as FAIR principles, also benefits health data holders, 
+health professionals, natural persons and the Union economy overall. A data quality and utility label for datasets 
+would inform health data users about the quality and utility characteristics of a dataset and enable them to choose 
+the datasets that best fit their needs. The data quality and utility label should not prevent datasets from being made
+
+[4] datasets.
+4. Where a health data access body has reason to believe that a data quality and utility label might be inaccurate, it shall 
+assess whether the dataset covered by the label meets the quality requirements forming part of the elements of the data 
+quality and utility label as referred to in paragraph 3 and, in the event the dataset does not meet the quality requirements, 
+shall revoke the label.
+
+[5] When health data users use electronic health data in accordance with this Chapter, they shall acknowledge the sources of 
+the electronic health data and the fact that the electronic health data have been obtained in the framework of the EHDS.
+5. Without prejudice to paragraph 2, health data users shall inform the health data access body of any significant finding 
+related to the health of the natural person whose data are included in the dataset.
+
+[6] — visual characteristics and technical specifications of the data quality and utility label,
+— minimum specifications for datasets of high impact for secondary use,
+— decisions on whether a third country allows Union health data applicants to access electronic health data in that 
+third country under conditions that are not more restrictive than those provided for in this Regulation,
+— necessary measures for the establishment and operation of the EHDS Board.
+
+[7] data users should be encouraged to report critical errors in datasets to health data access bodies. To support the 
+improvement of the initial database and further use of the enriched dataset, Member States should be able to 
+establish rules for the processing and the use of electronic health data containing improvements related to the 
+processing of those data. The improved dataset should be made available free of charge to the original health data
+
+[8] assessment, policymaking or regulatory purposes and it should be possible to make them available in accordance 
+with the rules laid down in this Regulation. Electronic health data consist of all categories of those data, irrespective 
+of whether such data are provided by the data subject or other natural or legal persons, such as health professionals, 
+or are processed in relation to a natural person’s health or well-being and should also include inferred and derived
+
+[9] dataset catalogue should be established to: facilitate the discoverability of datasets available in the EHDS; help health 
+data holders to publish their datasets; provide all stakeholders, including the general public, taking into account the 
+specific needs of people with disabilities, with information about datasets placed on the EHDS, such as quality and 
+utility labels and dataset information sheets; and provide health data users with up-to-date data quality and utility
+
+[10] a user-oriented public part, in which information concerning individual dataset parameters is accessible by electronic 
+means through an online portal;
+(z) ‘data quality’ means the degree to which the elements of electronic health data are suitable for their intended primary 
+use and secondary use;
+(aa) ‘data quality and utility label’ means a graphic diagram, including a scale, describing the data quality and conditions of 
+use of a dataset;",,
+H-018,"When two companies decide together how my data is used, which of them do I turn to for my rights, and who pays if I suffer damage?","They are joint controllers. Whatever their internal arrangement says, the data subject can exercise their rights against each of them. Where several controllers or processors involved in the same processing are responsible for the damage, each can be held liable for the entire damage so that the data subject is effectively compensated.","When two companies jointly determine the purposes and means of processing your personal data, each controller should be held liable for the entire damage. However, compensation may be apportioned according to their responsibility for the damage caused by the processing, provided that full and effective compensation is given to the data subject who suffered the damage. If they are joined in the same judicial proceedings, as per Member State law, compensation can be distributed among them based on their responsibilities.","[1] the protection of personal data to lodge a complaint on his or her behalf with a supervisory authority, exercise 
+the right to a judicial remedy on behalf of data subjects or, if provided for in Member State law, exercise the right 
+to receive compensation on behalf of data subjects. A Member State may provide for such a body, organisation or 
+association to have the right to lodge a complaint in that Member State, independently of a data subject's
+
+[2] processors are involved in the same processing, each controller or processor should be held liable for the entire 
+damage. However, where they are joined to the same judicial proceedings, in accordance with Member State law, 
+compensation may be apportioned according to the responsibility of each controller or processor for the damage 
+caused by the processing, provided that full and effective compensation of the data subject who suffered the
+
+[3] mandate, and the right to an effective judicial remedy where it has reasons to consider that the rights of a data 
+subject have been infringed as a result of the processing of personal data which infringes this Regulation. That 
+body, organisation or association may not be allowed to claim compensation on a data subject's behalf indepen­
+dently of the data subject's mandate. 
+(143)  Any natural or legal person has the right to bring an action for annulment of decisions of the Board before the
+
+[4] tenders. 
+(79)  The protection of the rights and freedoms of data subjects as well as the responsibility and liability of controllers 
+and processors, also in relation to the monitoring by and measures of supervisory authorities, requires a clear 
+allocation of the responsibilities under this Regulation, including where a controller determines the purposes and 
+means of the processing jointly with other controllers or where a processing operation is carried out on behalf of 
+a controller.
+
+[5] controllers. They shall in a transparent manner determine their respective responsibilities for compliance with the 
+obligations under this Regulation, in particular as regards the exercising of the rights of the data subject and their 
+respective duties to provide the information referred to in Articles 13 and 14, by means of an arrangement between 
+them unless, and in so far as, the respective responsibilities of the controllers are determined by Union or Member State
+
+[6] with a supervisory authority pursuant to Article 77, each data subject shall have the right to an effective judicial remedy 
+where he or she considers that his or her rights under this Regulation have been infringed as a result of the processing 
+of his or her personal data in non-compliance with this Regulation. 
+2. Proceedings against a controller or a processor shall be brought before the courts of the Member State where the
+
+[7] their personal data to lodge the complaint on his or her behalf, to exercise the rights referred to in Articles 77, 78 and 
+79 on his or her behalf, and to exercise the right to receive compensation referred to in Article 82 on his or her behalf 
+where provided for by Member State law. 
+2. Member States may provide that any body, organisation or association referred to in paragraph 1 of this Article, in­
+
+[8] trative or judicial redress and to claim compensation, in the Union or in a third country. They should relate in 
+particular to compliance with the general principles relating to personal data processing, the principles of data 
+protection by design and by default. Transfers may also be carried out by public authorities or bodies with public 
+authorities or bodies in third countries or with international organisations with corresponding duties or
+
+[9] 2. Paragraph 1 shall not apply if the decision: 
+(a)  is necessary for entering into, or performance of, a contract between the data subject and a data controller; 
+(b)  is authorised by Union or Member State law to which the controller is subject and which also lays down suitable 
+measures to safeguard the data subject's rights and freedoms and legitimate interests; or 
+(c)  is based on the data subject's explicit consent.
+
+[10] (b)  expressly confer enforceable rights on data subjects with regard to the processing of their personal data; and 
+(c)  fulfil the requirements laid down in paragraph 2. 
+2. The binding corporate rules referred to in paragraph 1 shall specify at least: 
+(a)  the structure and contact details of the group of undertakings, or group of enterprises engaged in a joint economic 
+activity and of each of its members;",,
