@@ -117,7 +117,10 @@ def build_report(meta: dict, testset: dict[str, dict], rows: list[dict], judged:
             "",
             f"- Correct: {fraction(sum(j['correct'] for j in judged), n)}",
             f"- Faithful to retrieved passages: {fraction(sum(j['faithful'] for j in judged), n)}",
-            f"- Judge model: `{judged[0].get('judge_model', '?')}`" if judged else "- No items judged",
+            "- Judge model: "
+            + ", ".join(sorted({f"`{j.get('judge_model_id')}` (alias `{j.get('judge_model_alias')}`)" for j in judged}))
+            if judged
+            else "- No items judged",
             "",
         ]
     return "\n".join(lines)

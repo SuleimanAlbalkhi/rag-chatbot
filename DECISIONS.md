@@ -727,3 +727,32 @@ baseline threshold (0.65) is unchanged; no new threshold is proposed because the
 - `vector_store_prefixes/` exists locally (git-ignored) and can be deleted or reused.
 - Retrieval quality remains the main weakness (Recall@10 22 of 35, multi 1 of 10); the next experiments should
   target recall (chunking, top-k, query rewriting) rather than the embedding prefix.
+
+---
+
+## D-024 — Final configuration = baseline; threshold stays 0.65
+
+- **Date:** 2026-10-31
+- **Status:** Accepted
+
+**Decision**
+No experiment was accepted (E-001 rejected), so the baseline configuration (E-000) is final for the holdout run:
+qwen2.5:3b, nomic-embed-text without prefixes, top-k 10, chunks 500/100, **cosine threshold 0.65**.
+
+**Alternatives**
+- 0.70: refuses more unanswerable questions at retrieval level (7 of 15 vs. 4 of 15) but also 6 of 35 answerable.
+- 0.60 or lower: no false refusals, but only 2 of 15 (0.60) or fewer correct refusals at retrieval level.
+- No threshold, relying only on the LLM's `NO_ANSWER`.
+
+**Rationale**
+- Rule: the highest threshold with **at most 1 false refusal on answerable questions** at retrieval level. On the
+  baseline curve (`eval/runs/baseline-retrieval`) that is 0.65: 1 of 35 false refusals, 4 of 15 correct refusals;
+  the next step, 0.70, already has 6 of 35 false refusals.
+- End to end at 0.65 the LLM adds most refusals: 14 of 15 unanswerable refused overall, at a cost of 6 of 35 false
+  refusals (5 of them from `NO_ANSWER`, not the threshold), so raising the threshold would mainly add false refusals.
+- The value was set before the evaluation (D-014) and is confirmed, not tuned, by the curve; it carries no extra
+  overfitting to the dev set.
+
+**Consequences**
+- The holdout run uses exactly this configuration; any later change needs a new dev experiment first.
+- The threshold is a weak filter (4 of 15 at retrieval level); refusal quality depends mostly on the generator.

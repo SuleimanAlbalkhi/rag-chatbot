@@ -104,7 +104,9 @@ def call_claude(exe: str, prompt: str, model: str) -> dict:
         "correct": bool(verdict["correct"]),
         "faithful": bool(verdict["faithful"]),
         "reason": verdict["reason"],
-        "judge_model": ",".join((out.get("modelUsage") or {}).keys()) or model,
+        "judge_model_alias": model,
+        # Exact model id(s) the CLI reports having used; the alias alone changes meaning over time.
+        "judge_model_id": ",".join(sorted((out.get("modelUsage") or {}).keys())) or None,
     }
 
 
@@ -135,7 +137,10 @@ def main() -> int:
 
     store = open_store()
     judged = []
-    with judge_path.open("w", encoding="utf-8") as out:
+    # Written under a temporary name and renamed only when every item is judged, so a failed
+    # attempt (e.g. expired CLI login) never leaves a partial judge.jsonl that would block a rerun.
+    partial_path = judge_path.with_suffix(".jsonl.partial")
+    with partial_path.open("w", encoding="utf-8") as out:
         for n, row in enumerate(todo, 1):
             item = testset[row["id"]]
             passages = chunk_texts(store, row["source_ids"])
@@ -145,6 +150,7 @@ def main() -> int:
             out.flush()
             judged.append((item, row, passages, verdict))
             print(f"[{n}/{len(todo)}] {row['id']} correct={verdict['correct']} faithful={verdict['faithful']}")
+    partial_path.rename(judge_path)
 
     sample = random.Random(FORM_SEED).sample(judged, min(args.form_size, len(judged)))
     with form_path.open("w", encoding="utf-8-sig", newline="") as f:
